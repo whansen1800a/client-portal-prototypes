@@ -528,7 +528,7 @@ function Sidebar() {
           <span style={{ flex: 1 }}>Payroll</span>
           {I.chevronDown}
         </div>
-        <div className="nav-child" role="button" tabIndex={0}>{I.building}<span>Company Details</span></div>
+        <div className="nav-child" role="button" tabIndex={0} style={{ cursor: 'pointer' }} onClick={() => window.location.href = 'payroll-company.html'}>{I.building}<span>Company Details</span></div>
         <div className="nav-child" role="button" tabIndex={0}>{I.employees}<span>Employees</span></div>
         <div className="nav-child active" role="button" tabIndex={0} aria-current="page">
           {I.contractor}<span>Contractors</span>

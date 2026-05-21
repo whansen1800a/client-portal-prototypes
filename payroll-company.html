@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Company Details — 1-800Accountant Portal</title>
+<link rel="icon" href=".claude/1-800Accountant Design System/assets/brand/favicon.ico">
+<link rel="stylesheet" href=".claude/1-800Accountant Design System/ui_kits/portal/portal.css">
+<style>
+/* ── Nested nav (Payroll section) ─────────────────────────── */
+.nav-section-parent {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 20px; font-weight: 500; font-size: 14px;
+  color: rgba(18,23,36,.65); cursor: default;
+  border-left: 3px solid transparent; user-select: none;
+}
+.nav-child {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px 9px 40px;
+  font-size: 13px; font-weight: 500; color: rgba(18,23,36,.6);
+  cursor: pointer; border-left: 3px solid transparent;
+  transition: background 150ms ease, color 150ms ease;
+}
+.nav-child:hover { background: rgba(0,0,0,.04); color: rgba(18,23,36,.9); }
+.nav-child.active { background: #DBF6E7; color: #1F7262; border-left-color: #2DA38D; }
+
+/* ── Page chrome ──────────────────────────────────────────── */
+.page-titlebar {
+  padding: 20px 28px 16px; background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,.07);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+}
+
+/* ── Content area ─────────────────────────────────────────── */
+.content-area { flex: 1; overflow-y: auto; padding: 24px 28px; }
+.content-inner { max-width: 860px; margin: 0 auto; }
+
+/* ── Company header ───────────────────────────────────────── */
+.co-header { display: flex; align-items: flex-start; gap: 16px; }
+.co-av {
+  width: 52px; height: 52px; border-radius: 12px; flex-shrink: 0;
+  background: #2DA38D; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; letter-spacing: -.5px;
+}
+.co-meta { flex: 1; min-width: 0; }
+.co-name { font-size: 20px; font-weight: 700; color: #121724; margin: 0 0 4px; }
+.co-sub  { font-size: 13px; color: rgba(18,23,36,.55); display: flex; align-items: center; gap: 8px; }
+.co-stats {
+  display: flex; gap: 0;
+  margin-top: 16px; padding-top: 14px;
+  border-top: 1px solid rgba(0,0,0,.06);
+}
+.co-stat {
+  flex: 1; display: flex; flex-direction: column; gap: 3px;
+  padding: 0 16px;
+  border-right: 1px solid rgba(0,0,0,.06);
+}
+.co-stat:first-child { padding-left: 0; }
+.co-stat:last-child  { border-right: 0; }
+.co-stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: rgba(18,23,36,.45); }
+.co-stat-val   { font-size: 14px; font-weight: 600; color: #121724; }
+
+/* ── Setup checklist ──────────────────────────────────────── */
+.phase-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: rgba(18,23,36,.4);
+  padding: 10px 0 6px;
+}
+.setup-step {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 13px 0; border-bottom: 1px solid rgba(0,0,0,.05);
+}
+.setup-step:last-child { border-bottom: 0; }
+.step-badge {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.step-badge.completed { background: #DBF6E7; }
+.step-badge.ready     { background: rgba(45,163,141,.12); }
+.step-badge.awaiting  { background: rgba(241,95,34,.1); }
+.step-badge.blocked   { background: #f1f3f8; }
+.step-body { flex: 1; min-width: 0; }
+.step-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+.step-title { font-size: 14px; font-weight: 600; color: #121724; }
+.step-desc  { font-size: 12px; color: rgba(18,23,36,.5); line-height: 1.45; }
+.step-end   { display: flex; align-items: center; gap: 10px; flex-shrink: 0; padding-top: 2px; }
+.simulate-link {
+  font-size: 11px; color: rgba(18,23,36,.4); cursor: pointer;
+  padding: 3px 8px; border-radius: 4px;
+  border: 1px solid rgba(0,0,0,.1);
+  background: transparent; font-family: inherit;
+  transition: background 150ms ease, color 150ms ease;
+}
+.simulate-link:hover { background: rgba(0,0,0,.05); color: rgba(18,23,36,.7); }
+
+/* ── Progress bar ─────────────────────────────────────────── */
+.prog-track { height: 6px; background: #eef0f5; border-radius: 999px; margin: 10px 0 4px; overflow: hidden; }
+.prog-fill  { height: 100%; background: #2DA38D; border-radius: 999px; transition: width 500ms ease; }
+
+/* ── Detail grid ──────────────────────────────────────────── */
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.dc-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+  color: rgba(18,23,36,.45); margin: 0 0 11px;
+}
+.dc-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: 13px; gap: 8px;
+}
+.dc-row:last-child { border-bottom: 0; }
+.dc-key { color: rgba(18,23,36,.55); font-weight: 500; flex-shrink: 0; }
+.dc-val { color: #121724; font-weight: 600; text-align: right; }
+.loc-item {
+  padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,.05);
+  font-size: 13px;
+}
+.loc-item:last-child { border-bottom: 0; padding-bottom: 0; }
+.loc-name { font-weight: 600; color: #121724; margin-bottom: 2px; }
+.loc-addr { color: rgba(18,23,36,.55); font-size: 12px; }
+.loc-tags { display: flex; gap: 5px; margin-top: 5px; }
+
+/* ── Modal ────────────────────────────────────────────────── */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.42); z-index: 50;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal {
+  background: #fff; border-radius: 16px;
+  width: 560px; max-width: calc(100vw - 32px); max-height: 90vh;
+  overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,.22);
+  display: flex; flex-direction: column;
+}
+.modal-top  { padding: 24px 26px 0; flex-shrink: 0; }
+.modal-body { padding: 18px 26px; flex: 1; }
+.modal-foot {
+  padding: 14px 26px 22px; border-top: 1px solid rgba(0,0,0,.08);
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+
+/* ── Modal tabs ───────────────────────────────────────────── */
+.modal-tabs { display: flex; border-bottom: 1px solid rgba(0,0,0,.1); margin-bottom: 18px; }
+.modal-tab {
+  padding: 8px 16px; font-size: 14px; font-weight: 500;
+  color: rgba(18,23,36,.55); cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.modal-tab.active { color: #2DA38D; border-bottom-color: #2DA38D; }
+.modal-tab:hover:not(.active) { color: rgba(18,23,36,.8); }
+
+/* ── Form ─────────────────────────────────────────────────── */
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block; font-size: 11px; font-weight: 700;
+  color: rgba(18,23,36,.6); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px;
+}
+.form-input {
+  width: 100%; height: 40px; padding: 0 12px;
+  border: 1px solid rgba(0,0,0,.16); border-radius: 6px;
+  font-size: 14px; font-family: inherit; color: #121724;
+  background: #fff; outline: none; box-sizing: border-box;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.form-input:focus { border-color: #2DA38D; box-shadow: 0 0 0 3px rgba(45,163,141,.1); }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-select { appearance: none; cursor: pointer; }
+.hint { font-size: 12px; color: rgba(18,23,36,.45); margin-top: 5px; }
+
+/* ── Document rows ────────────────────────────────────────── */
+.doc-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 0; border-bottom: 1px solid rgba(0,0,0,.05);
+}
+.doc-row:last-child { border-bottom: 0; }
+.doc-icon {
+  width: 34px; height: 34px; border-radius: 8px; flex-shrink: 0;
+  background: #f1f3f8; display: flex; align-items: center; justify-content: center;
+}
+.doc-icon.signed { background: #DBF6E7; }
+.doc-body { flex: 1; min-width: 0; }
+.doc-name { font-size: 14px; font-weight: 600; color: #121724; }
+.doc-sub  { font-size: 12px; color: rgba(18,23,36,.5); margin-top: 1px; }
+
+/* ── Signatory card ───────────────────────────────────────── */
+.sig-card {
+  border: 1px solid rgba(0,0,0,.1); border-radius: 10px; padding: 14px;
+  margin-bottom: 18px;
+}
+.sig-header { font-size: 13px; font-weight: 600; color: rgba(18,23,36,.65); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .05em; font-size: 11px; }
+
+/* ── Notice banners ───────────────────────────────────────── */
+.notice {
+  border-radius: 10px; padding: 12px 15px; font-size: 13px; line-height: 1.5;
+  background: #EBF8FF; border: 1px solid rgba(45,130,180,.2); color: #1a5c80;
+  margin-bottom: 16px;
+}
+.notice strong { color: #0f4060; }
+.notice-success {
+  border-radius: 10px; padding: 12px 15px; font-size: 13px; line-height: 1.5;
+  background: #DBF6E7; border: 1px solid rgba(31,114,98,.2); color: #1F7262;
+  margin-bottom: 16px;
+}
+.notice-warn {
+  border-radius: 10px; padding: 12px 15px; font-size: 13px; line-height: 1.5;
+  background: #FFF7ED; border: 1px solid rgba(217,119,6,.2); color: #92400e;
+  margin-bottom: 16px;
+}
+
+/* ── Amount inputs ────────────────────────────────────────── */
+.amount-wrap { position: relative; }
+.amount-wrap .dollar-sign {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: rgba(18,23,36,.4); font-weight: 600; pointer-events: none;
+}
+.amount-wrap .form-input { padding-left: 22px; }
+
+/* ── Finish banner ────────────────────────────────────────── */
+.finish-banner {
+  border: 2px solid #2DA38D; border-radius: 12px; padding: 16px 20px;
+  background: rgba(45,163,141,.04); margin-top: 4px;
+  display: flex; align-items: center; gap: 16px;
+}
+
+/* ── Btn danger ───────────────────────────────────────────── */
+.btn-danger {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 32px; padding: 0 13px; border-radius: 4px; border: 1px solid rgba(199,29,29,.25);
+  background: transparent; color: #C71D1D; font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+.btn-danger:hover { background: rgba(199,29,29,.06); border-color: rgba(199,29,34,.5); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel">
+// ────────────────────────────────────────────────────────────────────────────
+// DATA
+// ────────────────────────────────────────────────────────────────────────────
+
+const COMPANY = {
+  uuid: 'c-001',
+  legal_name: 'Mountain Creek Consulting LLC',
+  ein: '12-3456789',
+  tax_payer_type: 'LLC',
+  filing_form: '941',
+  naics_code: '541611',
+  industry_title: 'Management Consulting Services',
+  locations: [
+    { uuid: 'l1', label: 'Main Office', street1: '742 Evergreen Terrace', city: 'Portland', state: 'OR', zip: '97204', filing_address: true, mailing_address: true },
+    { uuid: 'l2', label: 'Austin Office', street1: '1600 Congress Ave', city: 'Austin', state: 'TX', zip: '78701', filing_address: false, mailing_address: false },
+  ],
+  bank_account: {
+    name: 'Chase Business Checking',
+    hidden_account_number: 'XXXX8912',
+    account_type: 'Checking',
+    routing_number: '021000021',
+  },
+  pay_schedule: {
+    frequency: 'Bi-weekly',
+    anchor_pay_date: '2024-09-06',
+    anchor_end_of_pay_period: '2024-08-23',
+  },
+  employee_count: 3,
+};
+
+// 9 Gusto onboarding steps.
+// status: 'completed' | 'ready' | 'awaiting' | 'blocked'
+const INITIAL_STEPS = [
+  { id: 'add_addresses',     phase: 'Company Setup',  title: 'Company Locations',        status: 'completed', description: '2 locations — Portland OR (filing/mailing) + Austin TX' },
+  { id: 'add_bank_info',     phase: 'Company Setup',  title: 'Bank Account',             status: 'completed', description: 'Chase Business Checking ····8912 — pending verification' },
+  { id: 'federal_tax_setup', phase: 'Company Setup',  title: 'Federal Tax Details',      status: 'completed', description: 'EIN 12-3456789 · LLC · Form 941' },
+  { id: 'select_industry',   phase: 'Company Setup',  title: 'Industry Classification',  status: 'completed', description: 'NAICS 541611 — Management Consulting Services' },
+  { id: 'payroll_schedule',  phase: 'Company Setup',  title: 'Pay Schedule',             status: 'completed', description: 'Bi-weekly · First pay date Sep 6, 2024' },
+  { id: 'add_employees',     phase: 'Employee Setup', title: 'Employee Setup',           status: 'completed', description: '3 employees fully onboarded and assigned work locations' },
+  { id: 'state_setup',       phase: 'Tax & Verify',   title: 'State Tax Setup',          status: 'ready',     description: 'Submit tax requirements for Oregon (OR) and Texas (TX)' },
+  { id: 'verify_bank_info',  phase: 'Tax & Verify',   title: 'Bank Account Verification',status: 'awaiting',  description: 'Micro-deposits sent · Arrives in 1–2 business days' },
+  { id: 'sign_all_forms',    phase: 'Finalization',   title: 'Signatory & Documents',    status: 'blocked',   description: 'Complete state setup and bank verification first' },
+];
+
+const US_STATES = [
+  'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
+  'KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
+  'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT',
+  'VA','WA','WV','WI','WY',
+];
+
+// ────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ────────────────────────────────────────────────────────────────────────────
+
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y, m, day] = d.split('-');
+  return new Date(y, m - 1, day).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function stepStatusConfig(status) {
+  return {
+    completed: { pillCls: 'pill-success', pillLabel: 'Complete',          iconColor: '#1F7262', badgeCls: 'completed' },
+    ready:     { pillCls: 'pill-info',    pillLabel: 'Action Required',   iconColor: '#2DA38D', badgeCls: 'ready'     },
+    awaiting:  { pillCls: 'pill-warn',    pillLabel: 'Awaiting',          iconColor: '#D97706', badgeCls: 'awaiting'  },
+    blocked:   { pillCls: 'pill-muted',   pillLabel: 'Blocked',           iconColor: '#9CA3AF', badgeCls: 'blocked'   },
+  }[status] || { pillCls: 'pill-muted', pillLabel: status, iconColor: '#9CA3AF', badgeCls: 'blocked' };
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// SVG ICONS
+// ────────────────────────────────────────────────────────────────────────────
+
+const I = {
+  payroll: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <rect x="2" y="5" width="20" height="14" rx="2"/>
+      <path d="M2 9h20M6 13h4M6 16h2.5"/>
+      <circle cx="16.5" cy="14" r="2"/>
+    </svg>
+  ),
+  chevronDown: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  ),
+  building: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="1.5"/>
+      <path d="M3 9h18M9 21V9"/>
+    </svg>
+  ),
+  employees: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="9" cy="7" r="3"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5"/>
+      <circle cx="17" cy="7" r="3"/><path d="M21 20c0-3-2.7-5-6-5"/>
+    </svg>
+  ),
+  contractor: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>
+      <path d="M16 3.5c1.5.8 2.5 2.3 2.5 4a4.5 4.5 0 01-.5 2" strokeDasharray="2 2"/>
+    </svg>
+  ),
+  check: (color = '#1F7262') => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.8" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  ),
+  clock: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"/>
+      <polyline points="12 7 12 12 15.5 14"/>
+    </svg>
+  ),
+  lock: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" aria-hidden="true">
+      <rect x="3" y="11" width="18" height="11" rx="2"/>
+      <path d="M7 11V7a5 5 0 0110 0v4"/>
+    </svg>
+  ),
+  circle: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2DA38D" strokeWidth="2.5" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 8v4l2.5 2.5" strokeWidth="2"/>
+    </svg>
+  ),
+  close: (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  ),
+  mapPin: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+    </svg>
+  ),
+  bank: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M3 10.5L12 3l9 7.5"/>
+      <rect x="5" y="10" width="14" height="8" rx="0.5"/>
+      <path d="M3 18h18"/>
+      <line x1="9" y1="14" x2="9" y2="18"/>
+      <line x1="15" y1="14" x2="15" y2="18"/>
+    </svg>
+  ),
+  dollar: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <line x1="12" y1="1" x2="12" y2="23"/>
+      <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+    </svg>
+  ),
+  calendar: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="18" rx="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+  ),
+  industry: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M2 20h20M4 20V10l6-6 6 6v10M10 20v-6h4v6"/>
+    </svg>
+  ),
+  users: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <circle cx="9" cy="7" r="3"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5"/>
+      <circle cx="17" cy="7" r="3"/><path d="M21 20c0-3-2.7-5-6-5"/>
+    </svg>
+  ),
+  doc: (signed) => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={signed ? '#1F7262' : '#6B7280'} strokeWidth="2" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      {signed && <polyline points="9 12 11 14 15 10" strokeWidth="2.5" stroke="#1F7262"/>}
+    </svg>
+  ),
+  bell: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
+    </svg>
+  ),
+  search: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+  ),
+  sparkle: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2DA38D" strokeWidth="2" aria-hidden="true">
+      <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/>
+    </svg>
+  ),
+};
+
+// ────────────────────────────────────────────────────────────────────────────
+// SIDEBAR
+// ────────────────────────────────────────────────────────────────────────────
+
+function Sidebar() {
+  return (
+    <aside className="sidebar">
+      <div className="brand">
+        <img src=".claude/1-800Accountant Design System/assets/logo/logo-full.svg" alt="1-800Accountant" />
+      </div>
+      <nav aria-label="Main navigation">
+        <div className="nav-section">Workspace</div>
+        {[
+          { icon: <img src=".claude/1-800Accountant Design System/assets/icons/Dashboard.svg" alt="" width="20" height="20" />, label: 'Dashboard' },
+          { icon: <img src=".claude/1-800Accountant Design System/assets/icons/Bookkeeping.svg" alt="" width="20" height="20" />, label: 'Bookkeeping' },
+          { icon: <img src=".claude/1-800Accountant Design System/assets/icons/Taxes.svg" alt="" width="20" height="20" />, label: 'Taxes' },
+        ].map(({ icon, label }) => (
+          <div key={label} className="nav-item" role="button" tabIndex={0}>{icon}<span style={{ flex: 1 }}>{label}</span></div>
+        ))}
+
+        {/* Payroll — expanded, Company Details active */}
+        <div className="nav-section-parent" aria-expanded="true">
+          {I.payroll}<span style={{ flex: 1 }}>Payroll</span>{I.chevronDown}
+        </div>
+        <div className="nav-child active" role="button" tabIndex={0} aria-current="page">
+          {I.building}<span>Company Details</span>
+        </div>
+        <div className="nav-child" role="button" tabIndex={0}>
+          {I.employees}<span>Employees</span>
+        </div>
+        <div className="nav-child" role="button" tabIndex={0}
+          onClick={() => window.location.href = 'payroll-contractors.html'}
+          style={{ cursor: 'pointer' }}>
+          {I.contractor}<span>Contractors</span>
+        </div>
+
+        <div className="nav-section">Portal</div>
+        {[
+          { icon: <img src=".claude/1-800Accountant Design System/assets/icons/Documents.svg" alt="" width="20" height="20" />, label: 'Documents' },
+          { icon: <img src=".claude/1-800Accountant Design System/assets/icons/Messages.svg" alt="" width="20" height="20" />, label: 'Messages', badge: 3 },
+        ].map(({ icon, label, badge }) => (
+          <div key={label} className="nav-item" role="button" tabIndex={0}>
+            {icon}<span style={{ flex: 1 }}>{label}</span>
+            {badge && <span className="pill pill-success" style={{ fontSize: 10, padding: '1px 7px' }}>{badge}</span>}
+          </div>
+        ))}
+      </nav>
+    </aside>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// TOPBAR
+// ────────────────────────────────────────────────────────────────────────────
+
+function Topbar() {
+  return (
+    <div className="topbar" role="banner">
+      <div className="search">
+        {I.search}
+        <input placeholder="Search company, documents…" aria-label="Search" />
+        <span className="tiny">⌘K</span>
+      </div>
+      <div style={{ flex: 1 }} />
+      <div className="actions">
+        <div className="icon-btn" title="Notifications" role="button" tabIndex={0} aria-label="Notifications">
+          {I.bell}
+          <span className="badge-dot" aria-label="2 notifications">2</span>
+        </div>
+        <div className="av md orange" role="button" tabIndex={0} aria-label="Account menu">MC</div>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// STATE TAX MODAL
+// ────────────────────────────────────────────────────────────────────────────
+
+function StateTaxModal({ onClose, onComplete }) {
+  const [tab, setTab] = React.useState('OR');
+  const [orForm, setOrForm] = React.useState({ bln: '', withholding: '', type: 'new' });
+  const [txForm, setTxForm] = React.useState({ twcAccount: '', suiRate: '' });
+
+  React.useEffect(() => {
+    const fn = (e) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', fn);
+    return () => window.removeEventListener('keydown', fn);
+  }, []);
+
+  return (
+    <div className="overlay" onClick={e => e.target === e.currentTarget && onClose()} role="dialog" aria-modal="true" aria-labelledby="st-modal-title">
+      <div className="modal">
+        <div className="modal-top">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <h2 id="st-modal-title" style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>State Tax Setup</h2>
+              <p className="muted" style={{ margin: '3px 0 0', fontSize: 13 }}>Submit tax registration details for each work state</p>
+            </div>
+            <button onClick={onClose} style={{ background: 'transparent', border: 0, padding: 4, cursor: 'pointer', color: 'rgba(18,23,36,.5)' }} aria-label="Close">{I.close}</button>
+          </div>
+        </div>
+        <div className="modal-body">
+          <div className="notice">
+            <strong>Tip:</strong> Each state generates requirements based on your employees' work locations. Requirements vary by state — Gusto's API returns exactly what's needed for each.
+          </div>
+
+          <div className="modal-tabs">
+            {['OR', 'TX'].map(s => (
+              <div key={s} className={`modal-tab${tab === s ? ' active' : ''}`} onClick={() => setTab(s)}>
+                {s === 'OR' ? 'Oregon' : 'Texas'}
+              </div>
+            ))}
+          </div>
+
+          {tab === 'OR' && (
+            <div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="or-bln">Business Identification Number (BIN)</label>
+                <input id="or-bln" className="form-input" value={orForm.bln} onChange={e => setOrForm(f => ({ ...f, bln: e.target.value }))} placeholder="e.g. 123456789" autoFocus />
+                <p className="hint">Oregon Department of Revenue — 9 digits</p>
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="or-wh">Withholding Account Number</label>
+                <input id="or-wh" className="form-input" value={orForm.withholding} onChange={e => setOrForm(f => ({ ...f, withholding: e.target.value }))} placeholder="e.g. WA-12345678" />
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="or-type">Employer Type</label>
+                <select id="or-type" className="form-input form-select" value={orForm.type} onChange={e => setOrForm(f => ({ ...f, type: e.target.value }))}>
+                  <option value="new">New Employer</option>
+                  <option value="existing">Existing Employer</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {tab === 'TX' && (
+            <div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="tx-twc">TWC Employer Account Number</label>
+                <input id="tx-twc" className="form-input" value={txForm.twcAccount} onChange={e => setTxForm(f => ({ ...f, twcAccount: e.target.value }))} placeholder="e.g. 12-345678-9" autoFocus />
+                <p className="hint">Texas Workforce Commission — issued when you register</p>
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="tx-sui">SUI Rate (%)</label>
+                <input id="tx-sui" className="form-input" type="number" min="0" max="20" step="0.01" value={txForm.suiRate} onChange={e => setTxForm(f => ({ ...f, suiRate: e.target.value }))} placeholder="e.g. 2.70" />
+                <p className="hint">State Unemployment Insurance rate — from your TWC notice</p>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="modal-foot">
+          <button className="btn btn-secondary btn-sm" onClick={onClose} style={{ cursor: 'pointer' }}>Cancel</button>
+          <div style={{ flex: 1 }} />
+          <button className="btn btn-primary btn-sm" onClick={onComplete} style={{ cursor: 'pointer' }}>
+            Save State Tax Info
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// BANK VERIFICATION MODAL
+// ────────────────────────────────────────────────────────────────────────────
+
+function BankVerifyModal({ onClose, onComplete }) {
+  const [amt1, setAmt1] = React.useState('0.32');
+  const [amt2, setAmt2] = React.useState('0.15');
+
+  React.useEffect(() => {
+    const fn = (e) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', fn);
+    return () => window.removeEventListener('keydown', fn);
+  }, []);
+
+  const canVerify = !!(amt1 && amt2 && parseFloat(amt1) > 0 && parseFloat(amt2) > 0);
+
+  return (
+    <div className="overlay" onClick={e => e.target === e.currentTarget && onClose()} role="dialog" aria-modal="true" aria-labelledby="bv-modal-title">
+      <div className="modal">
+        <div className="modal-top">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <h2 id="bv-modal-title" style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>Verify Bank Account</h2>
+              <p className="muted" style={{ margin: '3px 0 0', fontSize: 13 }}>Chase Business Checking ····8912</p>
+            </div>
+            <button onClick={onClose} style={{ background: 'transparent', border: 0, padding: 4, cursor: 'pointer', color: 'rgba(18,23,36,.5)' }} aria-label="Close">{I.close}</button>
+          </div>
+        </div>
+        <div className="modal-body">
+          <div className="notice-success">
+            <strong>Deposits received!</strong> Two small test deposits landed in your Chase account. Enter the exact amounts below to verify ownership.
+          </div>
+          <p style={{ margin: '0 0 16px', fontSize: 13, color: 'rgba(18,23,36,.6)', lineHeight: 1.55 }}>
+            Check your bank statement for two micro-deposits from Gusto. The amounts are pre-filled here for this demo.
+          </p>
+          <div className="form-row-2">
+            <div className="form-group">
+              <label className="form-label" htmlFor="amt1">Deposit 1</label>
+              <div className="amount-wrap">
+                <span className="dollar-sign">$</span>
+                <input id="amt1" className="form-input" type="number" min="0.01" max="0.99" step="0.01" value={amt1} onChange={e => setAmt1(e.target.value)} autoFocus />
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="amt2">Deposit 2</label>
+              <div className="amount-wrap">
+                <span className="dollar-sign">$</span>
+                <input id="amt2" className="form-input" type="number" min="0.01" max="0.99" step="0.01" value={amt2} onChange={e => setAmt2(e.target.value)} />
+              </div>
+            </div>
+          </div>
+          <p className="hint" style={{ marginTop: 0 }}>In production, the depositor will be described as "Gusto" in your bank statement.</p>
+        </div>
+        <div className="modal-foot">
+          <button className="btn btn-secondary btn-sm" onClick={onClose} style={{ cursor: 'pointer' }}>Cancel</button>
+          <div style={{ flex: 1 }} />
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={onComplete}
+            disabled={!canVerify}
+            style={{ cursor: canVerify ? 'pointer' : 'not-allowed', opacity: canVerify ? 1 : 0.45 }}
+          >
+            Verify Deposits
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// SIGN FORMS MODAL
+// ────────────────────────────────────────────────────────────────────────────
+
+const INITIAL_DOCS = [
+  { id: 'f8655',  name: 'Form 8655',     sub: 'Authorization for Third Party Service Provider', signed: false },
+  { id: 'or-wh',  name: 'OR WR (Oregon)',sub: 'Oregon Withholding Statement and Exemption Certificate', signed: false },
+  { id: 'tx-tw',  name: 'TX TWCER',      sub: 'Texas Workforce Commission Employer Report', signed: false },
+];
+
+function SignFormsModal({ onClose, onComplete }) {
+  const [sigName,  setSigName]  = React.useState('Marcus Chen');
+  const [sigTitle, setSigTitle] = React.useState('Managing Member');
+  const [docs, setDocs] = React.useState(INITIAL_DOCS);
+
+  React.useEffect(() => {
+    const fn = (e) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', fn);
+    return () => window.removeEventListener('keydown', fn);
+  }, []);
+
+  const signDoc = (id) => setDocs(prev => prev.map(d => d.id === id ? { ...d, signed: true } : d));
+  const signAll = () => setDocs(prev => prev.map(d => ({ ...d, signed: true })));
+  const allSigned = docs.every(d => d.signed);
+  const canComplete = sigName && sigTitle && allSigned;
+
+  return (
+    <div className="overlay" onClick={e => e.target === e.currentTarget && onClose()} role="dialog" aria-modal="true" aria-labelledby="sf-modal-title">
+      <div className="modal">
+        <div className="modal-top">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <h2 id="sf-modal-title" style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>Signatory & Documents</h2>
+              <p className="muted" style={{ margin: '3px 0 0', fontSize: 13 }}>Authorize a signatory and sign required forms</p>
+            </div>
+            <button onClick={onClose} style={{ background: 'transparent', border: 0, padding: 4, cursor: 'pointer', color: 'rgba(18,23,36,.5)' }} aria-label="Close">{I.close}</button>
+          </div>
+        </div>
+        <div className="modal-body">
+          {/* Signatory */}
+          <div className="sig-card">
+            <p className="sig-header">Authorized Signatory</p>
+            <div className="form-row-2">
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label" htmlFor="sig-name">Full Name</label>
+                <input id="sig-name" className="form-input" value={sigName} onChange={e => setSigName(e.target.value)} placeholder="Full legal name" />
+              </div>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label" htmlFor="sig-title">Title</label>
+                <input id="sig-title" className="form-input" value={sigTitle} onChange={e => setSigTitle(e.target.value)} placeholder="e.g. Managing Member" />
+              </div>
+            </div>
+            <p className="hint" style={{ margin: '10px 0 0' }}>Must be an officer, owner, partner, LLC member manager, or authorized representative.</p>
+          </div>
+
+          {/* Documents */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+            <p style={{ margin: 0, fontSize: 14, fontWeight: 600 }}>Required Documents</p>
+            {!allSigned && (
+              <button className="btn btn-secondary btn-sm" onClick={signAll} style={{ cursor: 'pointer', fontSize: 12 }}>
+                Sign All
+              </button>
+            )}
+          </div>
+
+          <div>
+            {docs.map(d => (
+              <div key={d.id} className="doc-row">
+                <div className={`doc-icon${d.signed ? ' signed' : ''}`}>
+                  {I.doc(d.signed)}
+                </div>
+                <div className="doc-body">
+                  <div className="doc-name">{d.name}</div>
+                  <div className="doc-sub">{d.sub}</div>
+                </div>
+                {d.signed ? (
+                  <span className="pill pill-success" style={{ fontSize: 11 }}>Signed</span>
+                ) : (
+                  <button className="btn btn-secondary btn-sm" onClick={() => signDoc(d.id)} style={{ cursor: 'pointer', fontSize: 12, flexShrink: 0 }}>
+                    Sign
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {!canComplete && (
+            <p style={{ fontSize: 12, color: 'rgba(18,23,36,.5)', margin: '14px 0 0' }}>
+              {!sigName || !sigTitle ? 'Add signatory name and title to continue.' : 'Sign all documents to continue.'}
+            </p>
+          )}
+        </div>
+        <div className="modal-foot">
+          <button className="btn btn-secondary btn-sm" onClick={onClose} style={{ cursor: 'pointer' }}>Cancel</button>
+          <div style={{ flex: 1 }} />
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={onComplete}
+            disabled={!canComplete}
+            style={{ cursor: canComplete ? 'pointer' : 'not-allowed', opacity: canComplete ? 1 : 0.45 }}
+          >
+            Complete &amp; Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// COMPANY PAGE
+// ────────────────────────────────────────────────────────────────────────────
+
+function CompanyPage() {
+  const [steps, setSteps] = React.useState(INITIAL_STEPS);
+  const [activeModal, setActiveModal] = React.useState(null);
+  const [onboardingFinished, setOnboardingFinished] = React.useState(false);
+
+  const completedCount = steps.filter(s => s.status === 'completed').length;
+  const totalCount     = steps.length;
+  const pct            = Math.round((completedCount / totalCount) * 100);
+  const allDone        = completedCount === totalCount;
+
+  // Mark a step as completed and auto-unblock dependents
+  const completeStep = (stepId, descriptionOverride) => {
+    setSteps(prev => {
+      const updated = prev.map(s =>
+        s.id === stepId
+          ? { ...s, status: 'completed', description: descriptionOverride || s.description }
+          : s
+      );
+      // Unblock sign_all_forms when both state_setup and verify_bank_info are done
+      const stateSetupDone  = updated.find(s => s.id === 'state_setup')?.status === 'completed';
+      const bankVerified    = updated.find(s => s.id === 'verify_bank_info')?.status === 'completed';
+      if (stateSetupDone && bankVerified) {
+        return updated.map(s =>
+          s.id === 'sign_all_forms'
+            ? { ...s, status: 'ready', description: 'Add authorized signatory and sign required documents' }
+            : s
+        );
+      }
+      return updated;
+    });
+    setActiveModal(null);
+  };
+
+  // Simulate micro-deposit arrival (demo only)
+  const simulateDeposits = () => {
+    setSteps(prev => prev.map(s =>
+      s.id === 'verify_bank_info'
+        ? { ...s, status: 'ready', description: 'Deposits received — enter amounts to verify' }
+        : s
+    ));
+  };
+
+  // Group consecutive steps by phase for section headers
+  const phases = steps.reduce((acc, step) => {
+    const last = acc[acc.length - 1];
+    if (last && last.phase === step.phase) {
+      last.steps.push(step);
+    } else {
+      acc.push({ phase: step.phase, steps: [step] });
+    }
+    return acc;
+  }, []);
+
+  const stepIcon = (status) => ({
+    completed: I.check('#1F7262'),
+    ready:     I.circle,
+    awaiting:  I.clock,
+    blocked:   I.lock,
+  }[status]);
+
+  const overallStatus = onboardingFinished
+    ? { label: 'Active',      cls: 'pill-success' }
+    : allDone
+    ? { label: 'Ready',       cls: 'pill-info'    }
+    : completedCount > 0
+    ? { label: 'In Progress', cls: 'pill-warn'    }
+    : { label: 'Not Started', cls: 'pill-muted'   };
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
+      {/* Titlebar */}
+      <div className="page-titlebar">
+        <div>
+          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>Company Details</h1>
+          <p style={{ margin: '2px 0 0', fontSize: 13, color: 'rgba(18,23,36,.5)' }}>Gusto Embedded Payroll onboarding</p>
+        </div>
+        <button
+          className="btn btn-primary"
+          disabled={!allDone || onboardingFinished}
+          onClick={() => setOnboardingFinished(true)}
+          style={{ cursor: allDone && !onboardingFinished ? 'pointer' : 'not-allowed', opacity: allDone && !onboardingFinished ? 1 : 0.45 }}
+          title={!allDone ? 'Complete all setup steps first' : ''}
+        >
+          {onboardingFinished ? 'Submitted — Pending Approval' : 'Finish Onboarding'}
+        </button>
+      </div>
+
+      {/* Scrollable content */}
+      <div className="content-area">
+        <div className="content-inner">
+
+          {onboardingFinished && (
+            <div className="finish-banner" style={{ marginBottom: 16 }}>
+              {I.sparkle}
+              <div>
+                <div style={{ fontWeight: 600, fontSize: 15 }}>Onboarding submitted — awaiting approval</div>
+                <div style={{ fontSize: 13, color: 'rgba(18,23,36,.55)', marginTop: 2 }}>Gusto's Risk team typically approves within 15 minutes to 2 business days. You'll receive a <code>company.approved</code> webhook when the company can run payroll.</div>
+              </div>
+            </div>
+          )}
+
+          {/* ── Company header card ─────────────────────────── */}
+          <div className="card-s" style={{ marginBottom: 14 }}>
+            <div className="co-header">
+              <div className="co-av">MC</div>
+              <div className="co-meta">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                  <h2 className="co-name">{COMPANY.legal_name}</h2>
+                  <span className={`pill ${overallStatus.cls}`}>{overallStatus.label}</span>
+                </div>
+                <div className="co-sub">
+                  <span>{COMPANY.tax_payer_type}</span>
+                  <span style={{ opacity: .35 }}>·</span>
+                  <span>EIN {COMPANY.ein}</span>
+                  <span style={{ opacity: .35 }}>·</span>
+                  <span>{COMPANY.industry_title}</span>
+                </div>
+              </div>
+              <button className="btn btn-secondary btn-sm" style={{ cursor: 'pointer', alignSelf: 'flex-start', flexShrink: 0 }}>Edit Info</button>
+            </div>
+            <div className="co-stats">
+              <div className="co-stat">
+                {I.mapPin}
+                <span className="co-stat-label">Locations</span>
+                <span className="co-stat-val">{COMPANY.locations.length}</span>
+              </div>
+              <div className="co-stat">
+                {I.users}
+                <span className="co-stat-label">Employees</span>
+                <span className="co-stat-val">{COMPANY.employee_count}</span>
+              </div>
+              <div className="co-stat">
+                {I.calendar}
+                <span className="co-stat-label">Pay Schedule</span>
+                <span className="co-stat-val">{COMPANY.pay_schedule.frequency}</span>
+              </div>
+              <div className="co-stat">
+                {I.bank}
+                <span className="co-stat-label">Bank</span>
+                <span className="co-stat-val">Chase ····8912</span>
+              </div>
+              <div className="co-stat">
+                {I.dollar}
+                <span className="co-stat-label">Filing Form</span>
+                <span className="co-stat-val">Form {COMPANY.filing_form}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Setup checklist card ────────────────────────── */}
+          <div className="card-s" style={{ marginBottom: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+              <h3 style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>Payroll Setup Checklist</h3>
+              <span className="muted" style={{ fontSize: 13 }}>{completedCount} of {totalCount} steps complete</span>
+            </div>
+            <div className="prog-track" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={`${pct}% complete`}>
+              <div className="prog-fill" style={{ width: `${pct}%` }} />
+            </div>
+
+            {phases.map(({ phase, steps: phaseSteps }) => (
+              <div key={phase}>
+                <div className="phase-label">{phase}</div>
+                {phaseSteps.map(step => {
+                  const cfg = stepStatusConfig(step.status);
+                  return (
+                    <div key={step.id} className="setup-step">
+                      <div className={`step-badge ${cfg.badgeCls}`}>
+                        {stepIcon(step.status)}
+                      </div>
+                      <div className="step-body">
+                        <div className="step-title-row">
+                          <span className="step-title">{step.title}</span>
+                        </div>
+                        <div className="step-desc">{step.description}</div>
+                        {/* Simulate deposits link for demo */}
+                        {step.id === 'verify_bank_info' && step.status === 'awaiting' && (
+                          <button className="simulate-link" style={{ marginTop: 7 }} onClick={simulateDeposits}>
+                            Simulate deposits (demo)
+                          </button>
+                        )}
+                      </div>
+                      <div className="step-end">
+                        <span className={`pill ${cfg.pillCls}`} style={{ fontSize: 11, flexShrink: 0 }}>{cfg.pillLabel}</span>
+                        {step.status === 'ready' && step.id === 'state_setup' && (
+                          <button className="btn btn-primary btn-sm" onClick={() => setActiveModal('state_setup')} style={{ cursor: 'pointer' }}>
+                            Set up →
+                          </button>
+                        )}
+                        {step.status === 'ready' && step.id === 'verify_bank_info' && (
+                          <button className="btn btn-primary btn-sm" onClick={() => setActiveModal('verify_bank')} style={{ cursor: 'pointer' }}>
+                            Verify →
+                          </button>
+                        )}
+                        {step.status === 'ready' && step.id === 'sign_all_forms' && (
+                          <button className="btn btn-primary btn-sm" onClick={() => setActiveModal('sign_forms')} style={{ cursor: 'pointer' }}>
+                            Set up →
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+
+            {allDone && !onboardingFinished && (
+              <div style={{ marginTop: 16, padding: '14px 16px', background: 'rgba(45,163,141,.06)', borderRadius: 10, border: '1px solid rgba(45,163,141,.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 14, color: '#1F7262' }}>All steps complete — ready to submit</div>
+                  <div style={{ fontSize: 12, color: 'rgba(18,23,36,.55)', marginTop: 2 }}>Click "Finish Onboarding" above to submit for Gusto's approval review (15 min – 2 business days).</div>
+                </div>
+                {I.check('#2DA38D')}
+              </div>
+            )}
+          </div>
+
+          {/* ── Detail cards grid ───────────────────────────── */}
+          <div className="detail-grid">
+
+            {/* Federal Tax */}
+            <div className="card-s">
+              <p className="dc-label">Federal Tax Details</p>
+              <div className="dc-row"><span className="dc-key">Legal Name</span><span className="dc-val">{COMPANY.legal_name}</span></div>
+              <div className="dc-row"><span className="dc-key">EIN</span><span className="dc-val">{COMPANY.ein}</span></div>
+              <div className="dc-row"><span className="dc-key">Entity Type</span><span className="dc-val">{COMPANY.tax_payer_type}</span></div>
+              <div className="dc-row"><span className="dc-key">Filing Form</span><span className="dc-val">Form {COMPANY.filing_form}</span></div>
+              <div className="dc-row"><span className="dc-key">NAICS Code</span><span className="dc-val">{COMPANY.naics_code}</span></div>
+            </div>
+
+            {/* Bank Account */}
+            <div className="card-s">
+              <p className="dc-label">Bank Account</p>
+              <div className="dc-row"><span className="dc-key">Account Name</span><span className="dc-val">{COMPANY.bank_account.name}</span></div>
+              <div className="dc-row"><span className="dc-key">Account #</span><span className="dc-val">{COMPANY.bank_account.hidden_account_number}</span></div>
+              <div className="dc-row"><span className="dc-key">Type</span><span className="dc-val">{COMPANY.bank_account.account_type}</span></div>
+              <div className="dc-row"><span className="dc-key">Routing #</span><span className="dc-val">····1021</span></div>
+              <div className="dc-row">
+                <span className="dc-key">Verification</span>
+                <span className="pill pill-warn" style={{ fontSize: 11 }}>Awaiting Deposits</span>
+              </div>
+            </div>
+
+            {/* Locations */}
+            <div className="card-s">
+              <p className="dc-label">Company Locations ({COMPANY.locations.length})</p>
+              {COMPANY.locations.map(loc => (
+                <div key={loc.uuid} className="loc-item">
+                  <div className="loc-name">{loc.label}</div>
+                  <div className="loc-addr">{loc.street1}, {loc.city}, {loc.state} {loc.zip}</div>
+                  <div className="loc-tags">
+                    {loc.filing_address  && <span className="pill pill-muted" style={{ fontSize: 10 }}>Filing</span>}
+                    {loc.mailing_address && <span className="pill pill-muted" style={{ fontSize: 10 }}>Mailing</span>}
+                    {!loc.filing_address && !loc.mailing_address && <span className="pill pill-info" style={{ fontSize: 10 }}>Work Location</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Pay Schedule */}
+            <div className="card-s">
+              <p className="dc-label">Pay Schedule</p>
+              <div className="dc-row"><span className="dc-key">Frequency</span><span className="dc-val">{COMPANY.pay_schedule.frequency}</span></div>
+              <div className="dc-row"><span className="dc-key">First Pay Date</span><span className="dc-val">{fmtDate(COMPANY.pay_schedule.anchor_pay_date)}</span></div>
+              <div className="dc-row"><span className="dc-key">End of Pay Period</span><span className="dc-val">{fmtDate(COMPANY.pay_schedule.anchor_end_of_pay_period)}</span></div>
+              <div className="dc-row" style={{ marginTop: 8 }}>
+                <span className="dc-key">Industry</span>
+                <span className="dc-val" style={{ textAlign: 'right', maxWidth: 180 }}>{COMPANY.industry_title}</span>
+              </div>
+              <div className="dc-row">
+                <span className="dc-key">NAICS</span>
+                <span className="dc-val">{COMPANY.naics_code}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* ── Modals ──────────────────────────────────────────── */}
+      {activeModal === 'state_setup' && (
+        <StateTaxModal
+          onClose={() => setActiveModal(null)}
+          onComplete={() => completeStep('state_setup', 'Tax requirements submitted for Oregon (OR) and Texas (TX)')}
+        />
+      )}
+      {activeModal === 'verify_bank' && (
+        <BankVerifyModal
+          onClose={() => setActiveModal(null)}
+          onComplete={() => completeStep('verify_bank_info', 'Chase Business Checking ····8912 — verified')}
+        />
+      )}
+      {activeModal === 'sign_forms' && (
+        <SignFormsModal
+          onClose={() => setActiveModal(null)}
+          onComplete={() => completeStep('sign_all_forms', 'Signatory added · 3 documents signed')}
+        />
+      )}
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// APP
+// ────────────────────────────────────────────────────────────────────────────
+
+function App() {
+  return (
+    <div className="app">
+      <Sidebar />
+      <div className="main" style={{ overflow: 'hidden' }}>
+        <Topbar />
+        <CompanyPage />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
