@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1-800Accountant — Portal Demos</title>
+<link rel="icon" href=".claude/1-800Accountant Design System/assets/brand/favicon.ico">
+<link rel="stylesheet" href=".claude/1-800Accountant Design System/colors_and_type.css">
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0;
+  font-family: var(--font-sans, 'Poppins', sans-serif);
+  background: #f5f6fa;
+  color: #121724;
+  -webkit-font-smoothing: antialiased;
+}
+.header {
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  padding: 18px 40px;
+  display: flex; align-items: center; gap: 16px;
+}
+.header img { height: 28px; }
+.header .divider { width: 1px; height: 24px; background: rgba(0,0,0,.12); }
+.header span { font-size: 14px; color: rgba(18,23,36,.5); font-weight: 500; }
+.content { max-width: 900px; margin: 40px auto; padding: 0 24px; }
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; }
+.subtitle { font-size: 14px; color: rgba(18,23,36,.55); margin: 0 0 28px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.demo-card {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.08);
+  padding: 20px;
+  text-decoration: none; color: inherit;
+  display: block;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+  cursor: pointer;
+}
+.demo-card:hover {
+  border-color: rgba(45,163,141,.4);
+  box-shadow: 0 4px 16px rgba(45,163,141,.1);
+}
+.demo-card-badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 600;
+  background: #DBF6E7; color: #1F7262;
+  margin-bottom: 12px;
+}
+.demo-card h2 { font-size: 15px; font-weight: 600; margin: 0 0 5px; }
+.demo-card p { font-size: 13px; color: rgba(18,23,36,.55); margin: 0; line-height: 1.5; }
+.demo-card-footer {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px solid rgba(0,0,0,.06);
+  font-size: 12px; color: rgba(18,23,36,.4);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.arrow {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #f1f5f9; color: rgba(18,23,36,.5);
+  font-size: 16px; transition: background 150ms ease;
+}
+.demo-card:hover .arrow { background: #2DA38D; color: #fff; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src=".claude/1-800Accountant Design System/assets/logo/logo-full.svg" alt="1-800Accountant">
+  <div class="divider"></div>
+  <span>Portal Demos</span>
+</div>
+
+<div class="content">
+  <h1>Portal UI Demos</h1>
+  <p class="subtitle">Interactive HTML prototypes for client portal features.</p>
+
+  <div class="grid">
+    <a class="demo-card" href="payroll-contractors.html">
+      <div class="demo-card-badge">Payroll</div>
+      <h2>Contractors</h2>
+      <p>Onboard and manage contractors via Gusto Embedded Payroll. Includes two-column list/detail view and 4-step Add Contractor flow.</p>
+      <div class="demo-card-footer">
+        <span>payroll-contractors.html</span>
+        <span class="arrow">›</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

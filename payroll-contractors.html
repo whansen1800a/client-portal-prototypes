@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contractors — 1-800Accountant Portal</title>
+<link rel="icon" href=".claude/1-800Accountant Design System/assets/brand/favicon.ico">
+<link rel="stylesheet" href=".claude/1-800Accountant Design System/ui_kits/portal/portal.css">
+<style>
+/* ── Nested nav (Payroll section) ─────────────────────────── */
+.nav-section-parent {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 20px;
+  font-weight: 500; font-size: 14px;
+  color: rgba(18,23,36,.65);
+  cursor: default;
+  border-left: 3px solid transparent;
+  user-select: none;
+}
+.nav-child {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px 9px 40px;
+  font-size: 13px; font-weight: 500;
+  color: rgba(18,23,36,.6);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 150ms ease, color 150ms ease;
+}
+.nav-child:hover { background: rgba(0,0,0,.04); color: rgba(18,23,36,.9); }
+.nav-child.active {
+  background: #DBF6E7; color: #1F7262;
+  border-left-color: #2DA38D;
+}
+
+/* ── Page chrome ──────────────────────────────────────────── */
+.page-titlebar {
+  padding: 20px 28px 16px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,.07);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.page-titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+
+/* ── Two-column split ─────────────────────────────────────── */
+.split-layout {
+  display: flex; flex: 1; overflow: hidden; min-height: 0;
+}
+.list-col {
+  width: 380px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  padding: 20px 18px;
+  gap: 12px;
+  overflow-y: auto;
+  border-right: 1px solid rgba(0,0,0,.08);
+}
+.detail-col {
+  flex: 1; min-width: 0;
+  overflow-y: auto;
+  padding: 24px 28px;
+}
+
+/* ── Contractor list row ──────────────────────────────────── */
+.c-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,.08);
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+.c-row:hover { border-color: rgba(45,163,141,.35); box-shadow: 0 2px 8px rgba(45,163,141,.1); }
+.c-row.selected { border-color: #2DA38D; box-shadow: 0 0 0 2px rgba(45,163,141,.15); background: #fafffe; }
+.c-row-info { flex: 1; min-width: 0; }
+.c-name { font-size: 14px; font-weight: 600; color: #121724; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-meta { font-size: 12px; color: rgba(18,23,36,.5); margin-top: 2px; }
+
+/* ── Empty state ──────────────────────────────────────────── */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; gap: 12px;
+  color: rgba(18,23,36,.4);
+  text-align: center;
+}
+.empty-state p { margin: 0; font-size: 14px; }
+
+/* ── Detail panel ─────────────────────────────────────────── */
+.detail-header {
+  display: flex; align-items: flex-start; gap: 16px; margin-bottom: 14px;
+}
+.detail-actions { display: flex; gap: 8px; margin-left: auto; flex-shrink: 0; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 0; margin-top: 12px; }
+.info-row { display: flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(18,23,36,.6); padding: 3px 0; }
+.info-row strong { color: #121724; font-weight: 600; }
+
+/* ── Progress bar ─────────────────────────────────────────── */
+.prog-track { height: 6px; background: #eef0f5; border-radius: 999px; margin: 10px 0 16px; overflow: hidden; }
+.prog-fill { height: 100%; background: #2DA38D; border-radius: 999px; transition: width 400ms ease; }
+
+/* ── Checklist ────────────────────────────────────────────── */
+.check-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,.05);
+}
+.check-row:last-child { border-bottom: 0; }
+.check-circle {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #f1f3f8;
+}
+.check-circle.done { background: #DBF6E7; }
+.check-label { flex: 1; font-size: 14px; font-weight: 500; color: #121724; }
+.check-label.done { color: rgba(18,23,36,.45); text-decoration: line-through; text-decoration-color: rgba(18,23,36,.2); }
+
+/* ── Modal ────────────────────────────────────────────────── */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.42); z-index: 50;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal {
+  background: #fff; border-radius: 16px;
+  width: 560px; max-width: calc(100vw - 32px); max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,.22);
+  display: flex; flex-direction: column;
+}
+.modal-top { padding: 24px 26px 0; flex-shrink: 0; }
+.modal-body { padding: 18px 26px; flex: 1; }
+.modal-foot {
+  padding: 14px 26px 22px;
+  border-top: 1px solid rgba(0,0,0,.08);
+  display: flex; align-items: center; gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ── Step dots ────────────────────────────────────────────── */
+.step-row { display: flex; gap: 5px; margin-bottom: 20px; }
+.step-pip { height: 4px; border-radius: 999px; flex: 1; background: #e8eaf0; transition: background 200ms ease; }
+.step-pip.active, .step-pip.past { background: #2DA38D; }
+
+/* ── Type cards ───────────────────────────────────────────── */
+.type-card {
+  border: 2px solid rgba(0,0,0,.1); border-radius: 12px;
+  padding: 16px; cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.type-card:hover { border-color: rgba(45,163,141,.4); }
+.type-card.sel { border-color: #2DA38D; background: rgba(45,163,141,.04); }
+.type-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: #f2f4f8;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: background 150ms ease;
+}
+.type-card.sel .type-icon { background: #DBF6E7; }
+.type-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.type-desc { font-size: 12px; color: rgba(18,23,36,.55); }
+
+/* ── Radio option ─────────────────────────────────────────── */
+.radio-card {
+  border: 1px solid rgba(0,0,0,.1); border-radius: 10px;
+  padding: 13px 15px; cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+.radio-card:hover { border-color: rgba(45,163,141,.4); }
+.radio-card.sel { border-color: #2DA38D; background: rgba(45,163,141,.03); }
+.radio-dot {
+  width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+  border: 2px solid rgba(0,0,0,.2);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 150ms ease;
+}
+.radio-card.sel .radio-dot { border-color: #2DA38D; }
+
+/* ── Form ─────────────────────────────────────────────────── */
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block; font-size: 11px; font-weight: 700;
+  color: rgba(18,23,36,.6); text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 6px;
+}
+.form-input {
+  width: 100%; height: 40px; padding: 0 12px;
+  border: 1px solid rgba(0,0,0,.16); border-radius: 6px;
+  font-size: 14px; font-family: inherit; color: #121724;
+  background: #fff; outline: none; box-sizing: border-box;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.form-input:focus { border-color: #2DA38D; box-shadow: 0 0 0 3px rgba(45,163,141,.1); }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ── Wage toggle ──────────────────────────────────────────── */
+.wage-toggle { display: flex; border: 1px solid rgba(0,0,0,.14); border-radius: 6px; overflow: hidden; }
+.wage-opt {
+  flex: 1; padding: 10px; text-align: center;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  background: #fff; color: rgba(18,23,36,.6);
+  transition: background 150ms ease, color 150ms ease;
+}
+.wage-opt.sel { background: #2DA38D; color: #fff; }
+
+/* ── Review rows ──────────────────────────────────────────── */
+.rev-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,.06); font-size: 14px;
+}
+.rev-row:last-child { border-bottom: 0; }
+.rev-key { color: rgba(18,23,36,.5); font-weight: 500; }
+.rev-val { font-weight: 600; color: #121724; text-align: right; }
+
+/* ── Notice banner ────────────────────────────────────────── */
+.notice {
+  border-radius: 10px; padding: 12px 15px; font-size: 13px; line-height: 1.5;
+  background: #EBF8FF; border: 1px solid rgba(45,130,180,.2); color: #1a5c80;
+}
+.notice strong { color: #0f4060; }
+
+/* ── Utils ────────────────────────────────────────────────── */
+.gap-top-4 { margin-top: 4px; }
+.gap-top-8 { margin-top: 8px; }
+.gap-top-12 { margin-top: 12px; }
+.gap-top-16 { margin-top: 16px; }
+.dollar-wrap { position: relative; }
+.dollar-wrap .dollar-sign { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: rgba(18,23,36,.4); font-weight: 600; pointer-events: none; }
+.dollar-wrap .form-input { padding-left: 22px; }
+.hint { font-size: 12px; color: rgba(18,23,36,.45); margin-top: 5px; }
+.checkbox-row { display: flex; align-items: center; gap: 9px; font-size: 14px; cursor: pointer; user-select: none; }
+.checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: #2DA38D; cursor: pointer; }
+
+/* ── Danger btn ───────────────────────────────────────────── */
+.btn-danger {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 32px; padding: 0 13px; border-radius: 4px; border: 1px solid rgba(199,29,29,.25);
+  background: transparent; color: #C71D1D; font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+.btn-danger:hover { background: rgba(199,29,29,.06); border-color: rgba(199,29,29,.5); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel">
+// ────────────────────────────────────────────────────────────────────────────
+// DATA
+// ────────────────────────────────────────────────────────────────────────────
+
+const SAMPLE = [
+  {
+    uuid: '1', type: 'Individual',
+    first_name: 'Jenna', last_name: 'Hunterson', business_name: null,
+    email: 'jenna.hunterson@gmail.com', start_date: '2022-03-14',
+    work_state: 'GA', wage_type: 'Hourly', rate: '40.00',
+    onboarding_status: 'onboarding_completed',
+    steps: [
+      { title: 'Basic details',        required: true,  done: true  },
+      { title: 'Compensation details', required: true,  done: true  },
+      { title: 'Add an address',       required: true,  done: true  },
+      { title: 'Payment details',      required: true,  done: true  },
+      { title: 'Sign documents',       required: false, done: true  },
+      { title: 'File new hire report', required: false, done: true  },
+    ],
+  },
+  {
+    uuid: '2', type: 'Business',
+    first_name: null, last_name: null, business_name: 'TechCorp LLC',
+    email: 'billing@techcorp.io', start_date: '2024-01-08',
+    work_state: 'CA', wage_type: 'Fixed', rate: '5000.00',
+    onboarding_status: 'self_onboarding_started',
+    steps: [
+      { title: 'Basic details',        required: true,  done: true  },
+      { title: 'Compensation details', required: true,  done: true  },
+      { title: 'Add an address',       required: true,  done: true  },
+      { title: 'Payment details',      required: true,  done: false },
+      { title: 'Sign documents',       required: false, done: false },
+      { title: 'File new hire report', required: false, done: false },
+    ],
+  },
+  {
+    uuid: '3', type: 'Individual',
+    first_name: 'Mike', last_name: 'Torres', business_name: null,
+    email: 'mike.torres@freelance.com', start_date: '2024-04-01',
+    work_state: 'TX', wage_type: 'Hourly', rate: '65.00',
+    onboarding_status: 'onboarding_pending',
+    steps: [
+      { title: 'Basic details',        required: true,  done: true  },
+      { title: 'Compensation details', required: true,  done: true  },
+      { title: 'Add an address',       required: true,  done: false },
+      { title: 'Payment details',      required: true,  done: false },
+      { title: 'Sign documents',       required: false, done: false },
+      { title: 'File new hire report', required: false, done: false },
+    ],
+  },
+];
+
+const US_STATES = [
+  'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
+  'KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
+  'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT',
+  'VA','WA','WV','WI','WY',
+];
+
+const AVATAR_COLORS = ['#2DA38D', '#3B7A80', '#F15F22', '#3F5261', '#7B5EA7'];
+
+// ────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ────────────────────────────────────────────────────────────────────────────
+
+function displayName(c) {
+  return c.type === 'Business' ? c.business_name : `${c.first_name} ${c.last_name}`;
+}
+
+function initials(c) {
+  if (c.type === 'Business') return c.business_name.slice(0, 2).toUpperCase();
+  return `${c.first_name[0]}${c.last_name[0]}`.toUpperCase();
+}
+
+function statusPill(s) {
+  return {
+    onboarding_completed:    { label: 'Onboarded',   cls: 'pill-success' },
+    self_onboarding_started: { label: 'Invite Sent', cls: 'pill-info'    },
+    onboarding_pending:      { label: 'Incomplete',  cls: 'pill-warn'    },
+    new:                     { label: 'New',         cls: 'pill-muted'   },
+  }[s] || { label: s, cls: 'pill-muted' };
+}
+
+function pct(steps) {
+  return Math.round((steps.filter(s => s.done).length / steps.length) * 100);
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y, m, day] = d.split('-');
+  return new Date(y, m - 1, day).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// SVG ICONS  (inline — no external deps)
+// ────────────────────────────────────────────────────────────────────────────
+
+const I = {
+  payroll: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <rect x="2" y="5" width="20" height="14" rx="2"/>
+      <path d="M2 9h20M6 13h4M6 16h2.5"/>
+      <circle cx="16.5" cy="14" r="2"/>
+    </svg>
+  ),
+  chevronDown: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  ),
+  building: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="1.5"/>
+      <path d="M3 9h18M9 21V9"/>
+    </svg>
+  ),
+  employees: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="9" cy="7" r="3"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5"/>
+      <circle cx="17" cy="7" r="3"/><path d="M21 20c0-3-2.7-5-6-5"/>
+    </svg>
+  ),
+  contractor: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>
+      <path d="M16 3.5c1.5.8 2.5 2.3 2.5 4a4.5 4.5 0 01-.5 2" strokeDasharray="2 2"/>
+    </svg>
+  ),
+  plus: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  ),
+  close: (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  ),
+  check: (done) => (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={done ? '#1F7262' : '#bbbcc8'} strokeWidth="2.8" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  ),
+  person: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+    </svg>
+  ),
+  business: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <rect x="2" y="7" width="20" height="14" rx="1"/>
+      <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+      <line x1="12" y1="12" x2="12" y2="12.01" strokeWidth="3"/>
+    </svg>
+  ),
+  email: (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2 8 12 13 22 8"/>
+    </svg>
+  ),
+  calendar: (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="18" rx="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+  ),
+  location: (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+    </svg>
+  ),
+  dollar: (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <line x1="12" y1="1" x2="12" y2="23"/>
+      <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+    </svg>
+  ),
+  emptyContractors: (
+    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="rgba(18,23,36,.18)" strokeWidth="1.2" aria-hidden="true">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+    </svg>
+  ),
+  bell: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
+    </svg>
+  ),
+  search: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+  ),
+};
+
+// ────────────────────────────────────────────────────────────────────────────
+// SIDEBAR
+// ────────────────────────────────────────────────────────────────────────────
+
+function Sidebar() {
+  return (
+    <aside className="sidebar">
+      <div className="brand">
+        <img src=".claude/1-800Accountant Design System/assets/logo/logo-full.svg" alt="1-800Accountant" />
+      </div>
+      <nav aria-label="Main navigation">
+        <div className="nav-section">Workspace</div>
+
+        {[
+          { icon: <img src=".claude/1-800Accountant Design System/assets/icons/Dashboard.svg" alt="" width="20" height="20" />, label: 'Dashboard' },
+          { icon: <img src=".claude/1-800Accountant Design System/assets/icons/Bookkeeping.svg" alt="" width="20" height="20" />, label: 'Bookkeeping' },
+          { icon: <img src=".claude/1-800Accountant Design System/assets/icons/Taxes.svg" alt="" width="20" height="20" />, label: 'Taxes' },
+        ].map(({ icon, label }) => (
+          <div key={label} className="nav-item" role="button" tabIndex={0}>
+            {icon}
+            <span style={{ flex: 1 }}>{label}</span>
+          </div>
+        ))}
+
+        {/* Payroll — expanded */}
+        <div className="nav-section-parent" aria-expanded="true">
+          {I.payroll}
+          <span style={{ flex: 1 }}>Payroll</span>
+          {I.chevronDown}
+        </div>
+        <div className="nav-child" role="button" tabIndex={0}>{I.building}<span>Company Details</span></div>
+        <div className="nav-child" role="button" tabIndex={0}>{I.employees}<span>Employees</span></div>
+        <div className="nav-child active" role="button" tabIndex={0} aria-current="page">
+          {I.contractor}<span>Contractors</span>
+        </div>
+
+        <div className="nav-section">Portal</div>
+        {[
+          { icon: <img src=".claude/1-800Accountant Design System/assets/icons/Documents.svg" alt="" width="20" height="20" />, label: 'Documents' },
+          { icon: <img src=".claude/1-800Accountant Design System/assets/icons/Messages.svg" alt="" width="20" height="20" />, label: 'Messages', badge: 3 },
+        ].map(({ icon, label, badge }) => (
+          <div key={label} className="nav-item" role="button" tabIndex={0}>
+            {icon}
+            <span style={{ flex: 1 }}>{label}</span>
+            {badge && <span className="pill pill-success" style={{ fontSize: 10, padding: '1px 7px' }}>{badge}</span>}
+          </div>
+        ))}
+      </nav>
+    </aside>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// TOPBAR
+// ────────────────────────────────────────────────────────────────────────────
+
+function Topbar() {
+  return (
+    <div className="topbar" role="banner">
+      <div className="search">
+        {I.search}
+        <input placeholder="Search contractors, documents…" aria-label="Search" />
+        <span className="tiny">⌘K</span>
+      </div>
+      <div style={{ flex: 1 }} />
+      <div className="actions">
+        <div className="icon-btn" title="Notifications" role="button" tabIndex={0} aria-label="Notifications">
+          {I.bell}
+          <span className="badge-dot" aria-label="2 notifications">2</span>
+        </div>
+        <div className="av md orange" role="button" tabIndex={0} aria-label="Account menu">MC</div>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// CONTRACTOR ROW
+// ────────────────────────────────────────────────────────────────────────────
+
+function ContractorRow({ c, idx, selected, onSelect }) {
+  const { label, cls } = statusPill(c.onboarding_status);
+  const p = pct(c.steps);
+  return (
+    <div
+      className={`c-row${selected ? ' selected' : ''}`}
+      onClick={onSelect}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onSelect()}
+      role="button"
+      tabIndex={0}
+      aria-pressed={selected}
+      aria-label={`${displayName(c)}, ${label}`}
+    >
+      <div className="av" style={{ background: AVATAR_COLORS[idx % AVATAR_COLORS.length], width: 40, height: 40, fontSize: 14, flexShrink: 0 }}>
+        {initials(c)}
+      </div>
+      <div className="c-row-info">
+        <div className="c-name">{displayName(c)}</div>
+        <div className="c-meta">{c.type} · Started {fmtDate(c.start_date)}</div>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4, flexShrink: 0 }}>
+        <span className={`pill ${cls}`}>{label}</span>
+        {c.onboarding_status !== 'onboarding_completed' && (
+          <span style={{ fontSize: 11, color: 'rgba(18,23,36,.4)' }}>{p}% done</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// CONTRACTOR DETAIL
+// ────────────────────────────────────────────────────────────────────────────
+
+function ContractorDetail({ c, idx }) {
+  const { label, cls } = statusPill(c.onboarding_status);
+  const p = pct(c.steps);
+  const doneRequired = c.steps.filter(s => s.required && s.done).length;
+  const totalRequired = c.steps.filter(s => s.required).length;
+
+  return (
+    <div style={{ maxWidth: 580 }}>
+      {/* Header card */}
+      <div className="card-s" style={{ marginBottom: 16 }}>
+        <div className="detail-header">
+          <div className="av lg" style={{ background: AVATAR_COLORS[idx % AVATAR_COLORS.length] }}>
+            {initials(c)}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 5 }}>
+              <h2 style={{ margin: 0, fontSize: 19, fontWeight: 600 }}>{displayName(c)}</h2>
+              <span className={`pill ${cls}`}>{label}</span>
+            </div>
+            <span className="pill pill-muted" style={{ fontSize: 12 }}>{c.type}</span>
+          </div>
+          <div className="detail-actions">
+            <button className="btn btn-secondary btn-sm">Edit</button>
+            <button className="btn-danger">Dismiss</button>
+          </div>
+        </div>
+
+        <div className="divider" style={{ margin: '14px 0 10px' }} />
+
+        <div className="info-grid">
+          <div className="info-row">{I.email}&nbsp;<span>Email&emsp;</span><strong>{c.email}</strong></div>
+          <div className="info-row">{I.calendar}&nbsp;<span>Started&emsp;</span><strong>{fmtDate(c.start_date)}</strong></div>
+          <div className="info-row">{I.location}&nbsp;<span>Work state&emsp;</span><strong>{c.work_state}</strong></div>
+          <div className="info-row">{I.dollar}&nbsp;<strong>
+            {c.wage_type === 'Hourly' ? `$${c.rate}/hr` : `$${Number(c.rate).toLocaleString()} fixed`}
+          </strong></div>
+        </div>
+      </div>
+
+      {/* Checklist card */}
+      <div className="card-s">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+          <h3 style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>Onboarding Checklist</h3>
+          <span className="muted" style={{ fontSize: 13 }}>
+            {doneRequired}/{totalRequired} required steps
+          </span>
+        </div>
+
+        <div className="prog-track" role="progressbar" aria-valuenow={p} aria-valuemin={0} aria-valuemax={100} aria-label={`${p}% complete`}>
+          <div className="prog-fill" style={{ width: `${p}%` }} />
+        </div>
+
+        {c.steps.map((step) => (
+          <div key={step.title} className="check-row">
+            <div className={`check-circle${step.done ? ' done' : ''}`}>
+              {I.check(step.done)}
+            </div>
+            <span className={`check-label${step.done ? ' done' : ''}`}>{step.title}</span>
+            <span className={`pill ${step.required ? 'pill-muted' : 'pill-info'}`} style={{ fontSize: 11, flexShrink: 0 }}>
+              {step.required ? 'Required' : 'Optional'}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// ADD CONTRACTOR MODAL
+// ────────────────────────────────────────────────────────────────────────────
+
+const DEFAULT_FORM = {
+  type: 'Individual', method: 'employer',
+  firstName: '', lastName: '', businessName: '',
+  email: '', startDate: '', workState: '',
+  fileNewHire: true,
+  wageType: 'Hourly', rate: '',
+};
+
+function AddContractorModal({ onClose, onSave }) {
+  const [step, setStep] = React.useState(1);
+  const [form, setForm] = React.useState(DEFAULT_FORM);
+  const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target ? e.target.value : e }));
+  const toggle = (k) => () => setForm(f => ({ ...f, [k]: !f[k] }));
+
+  const canNext = React.useMemo(() => {
+    if (step === 2) {
+      if (form.type === 'Business') return form.businessName && form.email && form.workState;
+      return form.firstName && form.lastName && form.email && form.workState;
+    }
+    if (step === 3) return !!form.rate;
+    return true;
+  }, [step, form]);
+
+  const handleAdd = () => {
+    const status = form.method === 'self' ? 'self_onboarding_started' : 'onboarding_pending';
+    onSave({
+      uuid: String(Date.now()),
+      type: form.type,
+      first_name: form.firstName || null,
+      last_name:  form.lastName  || null,
+      business_name: form.businessName || null,
+      email: form.email,
+      start_date: form.startDate || new Date().toISOString().slice(0, 10),
+      work_state: form.workState,
+      wage_type: form.wageType,
+      rate: form.rate,
+      onboarding_status: status,
+      steps: [
+        { title: 'Basic details',        required: true,  done: true  },
+        { title: 'Compensation details', required: true,  done: true  },
+        { title: 'Add an address',       required: true,  done: form.method === 'employer' },
+        { title: 'Payment details',      required: true,  done: false },
+        { title: 'Sign documents',       required: false, done: false },
+        { title: 'File new hire report', required: false, done: !!form.fileNewHire && form.method === 'employer' },
+      ],
+    });
+  };
+
+  // Close on Escape
+  React.useEffect(() => {
+    const fn = (e) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', fn);
+    return () => window.removeEventListener('keydown', fn);
+  }, []);
+
+  const stepLabel = ['', 'Contractor Type', 'Basic Details', 'Compensation', 'Review'][step];
+
+  return (
+    <div className="overlay" onClick={e => e.target === e.currentTarget && onClose()} role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div className="modal">
+        {/* Header */}
+        <div className="modal-top">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <h2 id="modal-title" style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>Add Contractor</h2>
+              <p className="muted" style={{ margin: '3px 0 0', fontSize: 13 }}>Step {step} of 4 — {stepLabel}</p>
+            </div>
+            <button onClick={onClose} className="btn btn-sm" style={{ background: 'transparent', border: 0, padding: 4, cursor: 'pointer', color: 'rgba(18,23,36,.5)' }} aria-label="Close dialog">
+              {I.close}
+            </button>
+          </div>
+        </div>
+
+        <div className="modal-body">
+          {/* Step dots */}
+          <div className="step-row" aria-hidden="true">
+            {[1,2,3,4].map(n => (
+              <div key={n} className={`step-pip${n < step ? ' past' : n === step ? ' active' : ''}`} />
+            ))}
+          </div>
+
+          {/* ── Step 1: Type ─────────────────────────────────── */}
+          {step === 1 && (
+            <div>
+              <p style={{ fontWeight: 600, marginBottom: 10, marginTop: 0 }}>What type of contractor?</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
+                {[
+                  { v: 'Individual', icon: I.person,   title: 'Individual',   desc: 'Freelancer, consultant, or sole proprietor' },
+                  { v: 'Business',   icon: I.business, title: 'Business',     desc: 'LLC, Corp, or other business entity' },
+                ].map(({ v, icon, title, desc }) => (
+                  <div key={v} className={`type-card${form.type === v ? ' sel' : ''}`} onClick={() => setForm(f => ({ ...f, type: v }))} role="radio" aria-checked={form.type === v} tabIndex={0} onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setForm(f => ({ ...f, type: v }))}>
+                    <div className="type-icon">{icon}</div>
+                    <div>
+                      <div className="type-title">{title}</div>
+                      <div className="type-desc">{desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <p style={{ fontWeight: 600, marginBottom: 10, marginTop: 0 }}>How will they onboard?</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                {[
+                  { v: 'employer', title: "I'll enter their info", desc: 'Enter all details on their behalf' },
+                  { v: 'self',     title: 'Send a self-onboarding invite', desc: 'Contractor completes their own details via email link' },
+                ].map(({ v, title, desc }) => (
+                  <div key={v} className={`radio-card${form.method === v ? ' sel' : ''}`} onClick={() => setForm(f => ({ ...f, method: v }))} role="radio" aria-checked={form.method === v} tabIndex={0} onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setForm(f => ({ ...f, method: v }))}>
+                    <div className="radio-dot">
+                      {form.method === v && <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#2DA38D' }} />}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: 14 }}>{title}</div>
+                      <div style={{ fontSize: 12, color: 'rgba(18,23,36,.55)' }}>{desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── Step 2: Basic Details ─────────────────────────── */}
+          {step === 2 && (
+            <div>
+              {form.type === 'Business' ? (
+                <div className="form-group">
+                  <label className="form-label" htmlFor="biz-name">Business Name</label>
+                  <input id="biz-name" className="form-input" value={form.businessName} onChange={set('businessName')} placeholder="Acme Corp LLC" autoFocus />
+                </div>
+              ) : (
+                <div className="form-group form-row-2">
+                  <div>
+                    <label className="form-label" htmlFor="first-name">First Name</label>
+                    <input id="first-name" className="form-input" value={form.firstName} onChange={set('firstName')} placeholder="Jane" autoFocus />
+                  </div>
+                  <div>
+                    <label className="form-label" htmlFor="last-name">Last Name</label>
+                    <input id="last-name" className="form-input" value={form.lastName} onChange={set('lastName')} placeholder="Smith" />
+                  </div>
+                </div>
+              )}
+              <div className="form-group">
+                <label className="form-label" htmlFor="email">Email Address</label>
+                <input id="email" className="form-input" type="email" value={form.email} onChange={set('email')} placeholder="contractor@email.com" />
+              </div>
+              <div className="form-row-2 form-group">
+                <div>
+                  <label className="form-label" htmlFor="start-date">Start Date</label>
+                  <input id="start-date" className="form-input" type="date" value={form.startDate} onChange={set('startDate')} />
+                </div>
+                <div>
+                  <label className="form-label" htmlFor="work-state">Work State</label>
+                  <select id="work-state" className="form-input" value={form.workState} onChange={set('workState')}>
+                    <option value="">Select state…</option>
+                    {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+              </div>
+              <label className="checkbox-row" htmlFor="new-hire">
+                <input id="new-hire" type="checkbox" checked={form.fileNewHire} onChange={toggle('fileNewHire')} />
+                File new hire report
+              </label>
+            </div>
+          )}
+
+          {/* ── Step 3: Compensation ──────────────────────────── */}
+          {step === 3 && (
+            <div>
+              <div className="form-group">
+                <label className="form-label">Wage Type</label>
+                <div className="wage-toggle" role="radiogroup" aria-label="Wage type">
+                  {['Hourly', 'Fixed'].map(wt => (
+                    <div key={wt} className={`wage-opt${form.wageType === wt ? ' sel' : ''}`} onClick={() => setForm(f => ({ ...f, wageType: wt }))} role="radio" aria-checked={form.wageType === wt} tabIndex={0}>{wt}</div>
+                  ))}
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="rate">Rate</label>
+                <div className="dollar-wrap">
+                  <span className="dollar-sign">$</span>
+                  <input id="rate" className="form-input" type="number" min="0" step="0.01" value={form.rate} onChange={set('rate')} placeholder="0.00" autoFocus />
+                </div>
+                <p className="hint">{form.wageType === 'Hourly' ? 'Per hour worked' : 'Per payment or project'}</p>
+              </div>
+            </div>
+          )}
+
+          {/* ── Step 4: Review ────────────────────────────────── */}
+          {step === 4 && (
+            <div>
+              <div className="card-s" style={{ marginBottom: 14, padding: '6px 16px' }}>
+                <div className="rev-row"><span className="rev-key">Type</span><span className="rev-val">{form.type}</span></div>
+                <div className="rev-row"><span className="rev-key">Name</span><span className="rev-val">{form.type === 'Business' ? form.businessName : `${form.firstName} ${form.lastName}`}</span></div>
+                <div className="rev-row"><span className="rev-key">Email</span><span className="rev-val">{form.email}</span></div>
+                <div className="rev-row"><span className="rev-key">Start Date</span><span className="rev-val">{fmtDate(form.startDate) || 'Today'}</span></div>
+                <div className="rev-row"><span className="rev-key">Work State</span><span className="rev-val">{form.workState}</span></div>
+                <div className="rev-row"><span className="rev-key">Compensation</span><span className="rev-val">${form.rate} {form.wageType === 'Hourly' ? '/ hr' : 'fixed'}</span></div>
+                <div className="rev-row"><span className="rev-key">Onboarding</span><span className="rev-val">{form.method === 'self' ? 'Self-onboarding invite' : 'Employer entry'}</span></div>
+                <div className="rev-row" style={{ borderBottom: 0 }}><span className="rev-key">New hire report</span><span className="rev-val">{form.fileNewHire ? 'Yes' : 'No'}</span></div>
+              </div>
+              {form.method === 'self' && (
+                <div className="notice">
+                  <strong>Note:</strong> Gusto does not send emails directly to contractors. You'll need to share the self-onboarding link with {form.type === 'Business' ? form.businessName : form.firstName} through your own communication channels.
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="modal-foot">
+          <button className="btn btn-secondary btn-sm" onClick={onClose} style={{ cursor: 'pointer' }}>Cancel</button>
+          <div style={{ flex: 1 }} />
+          {step > 1 && (
+            <button className="btn btn-secondary btn-sm" onClick={() => setStep(s => s - 1)} style={{ cursor: 'pointer' }}>Back</button>
+          )}
+          {step < 4 ? (
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => setStep(s => s + 1)}
+              disabled={!canNext}
+              style={{ cursor: canNext ? 'pointer' : 'not-allowed', opacity: canNext ? 1 : 0.45 }}
+            >
+              Continue
+            </button>
+          ) : (
+            <button className="btn btn-primary btn-sm" onClick={handleAdd} style={{ cursor: 'pointer' }}>
+              Add Contractor
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// CONTRACTORS PAGE
+// ────────────────────────────────────────────────────────────────────────────
+
+function ContractorsPage() {
+  const [contractors, setContractors] = React.useState(SAMPLE);
+  const [selected, setSelected] = React.useState(SAMPLE[0]);
+  const [modal, setModal] = React.useState(false);
+
+  const handleSave = (c) => {
+    setContractors(prev => [...prev, c]);
+    setSelected(c);
+    setModal(false);
+  };
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
+      {/* Title bar */}
+      <div className="page-titlebar">
+        <div>
+          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>Contractors</h1>
+          <p style={{ margin: '2px 0 0', fontSize: 13, color: 'rgba(18,23,36,.5)' }}>
+            {contractors.length} contractor{contractors.length !== 1 ? 's' : ''}
+          </p>
+        </div>
+      </div>
+
+      {/* Split layout */}
+      <div className="split-layout">
+        {/* Left: list */}
+        <div className="list-col">
+          <button className="btn btn-primary" onClick={() => setModal(true)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, alignSelf: 'flex-start' }}>
+            {I.plus} Add Contractor
+          </button>
+
+          {contractors.length === 0 ? (
+            <div className="empty-state" style={{ flex: 1 }}>
+              {I.emptyContractors}
+              <p>No contractors yet.<br/>Click "Add Contractor" to get started.</p>
+            </div>
+          ) : (
+            contractors.map((c, i) => (
+              <ContractorRow
+                key={c.uuid}
+                c={c} idx={i}
+                selected={selected?.uuid === c.uuid}
+                onSelect={() => setSelected(c)}
+              />
+            ))
+          )}
+        </div>
+
+        {/* Divider */}
+        <div style={{ width: 1, background: 'rgba(0,0,0,.08)', flexShrink: 0 }} />
+
+        {/* Right: detail */}
+        <div className="detail-col">
+          {selected ? (
+            <ContractorDetail
+              c={selected}
+              idx={contractors.findIndex(c => c.uuid === selected.uuid)}
+            />
+          ) : (
+            <div className="empty-state" style={{ height: '100%' }}>
+              {I.emptyContractors}
+              <p>Select a contractor to see the details.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {modal && <AddContractorModal onClose={() => setModal(false)} onSave={handleSave} />}
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// APP
+// ────────────────────────────────────────────────────────────────────────────
+
+function App() {
+  return (
+    <div className="app">
+      <Sidebar />
+      <div className="main" style={{ overflow: 'hidden' }}>
+        <Topbar />
+        <ContractorsPage />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
