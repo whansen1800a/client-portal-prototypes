@@ -260,6 +260,7 @@ const SAMPLE = [
     first_name: 'Jenna', last_name: 'Hunterson', business_name: null,
     email: 'jenna.hunterson@gmail.com', start_date: '2022-03-14',
     work_state: 'GA', wage_type: 'Hourly', rate: '40.00',
+    address: { street1: '39057 Broderick Light', street2: 'Apt. 612', city: 'Atlanta', state: 'GA', zip: '30301' },
     onboarding_status: 'onboarding_completed',
     steps: [
       { title: 'Basic details',        required: true,  done: true  },
@@ -597,6 +598,12 @@ function ContractorDetail({ c, idx }) {
           <div className="info-row">{I.dollar}&nbsp;<strong>
             {c.wage_type === 'Hourly' ? `$${c.rate}/hr` : `$${Number(c.rate).toLocaleString()} fixed`}
           </strong></div>
+          {c.address && c.address.street1 && (
+            <div className="info-row" style={{ gridColumn: '1 / -1', marginTop: 2 }}>
+              {I.location}&nbsp;<span>Address&emsp;</span>
+              <strong>{c.address.street1}{c.address.street2 ? `, ${c.address.street2}` : ''}, {c.address.city}, {c.address.state} {c.address.zip}</strong>
+            </div>
+          )}
         </div>
       </div>
 
@@ -639,6 +646,7 @@ const DEFAULT_FORM = {
   email: '', startDate: '', workState: '',
   fileNewHire: true,
   wageType: 'Hourly', rate: '',
+  street1: '', street2: '', city: '', addrState: '', zip: '',
 };
 
 function AddContractorModal({ onClose, onSave }) {
@@ -653,6 +661,7 @@ function AddContractorModal({ onClose, onSave }) {
       return form.firstName && form.lastName && form.email && form.workState;
     }
     if (step === 3) return !!form.rate;
+    if (step === 4) return !!(form.street1 && form.city && form.addrState && form.zip);
     return true;
   }, [step, form]);
 
@@ -669,14 +678,15 @@ function AddContractorModal({ onClose, onSave }) {
       work_state: form.workState,
       wage_type: form.wageType,
       rate: form.rate,
+      address: { street1: form.street1, street2: form.street2, city: form.city, state: form.addrState, zip: form.zip },
       onboarding_status: status,
       steps: [
         { title: 'Basic details',        required: true,  done: true  },
         { title: 'Compensation details', required: true,  done: true  },
-        { title: 'Add an address',       required: true,  done: form.method === 'employer' },
+        { title: 'Add an address',       required: true,  done: true  },
         { title: 'Payment details',      required: true,  done: false },
         { title: 'Sign documents',       required: false, done: false },
-        { title: 'File new hire report', required: false, done: !!form.fileNewHire && form.method === 'employer' },
+        { title: 'File new hire report', required: false, done: !!form.fileNewHire },
       ],
     });
   };
@@ -688,7 +698,7 @@ function AddContractorModal({ onClose, onSave }) {
     return () => window.removeEventListener('keydown', fn);
   }, []);
 
-  const stepLabel = ['', 'Contractor Type', 'Basic Details', 'Compensation', 'Review'][step];
+  const stepLabel = ['', 'Contractor Type', 'Basic Details', 'Compensation', 'Address', 'Review'][step];
 
   return (
     <div className="overlay" onClick={e => e.target === e.currentTarget && onClose()} role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -698,7 +708,7 @@ function AddContractorModal({ onClose, onSave }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <h2 id="modal-title" style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>Add Contractor</h2>
-              <p className="muted" style={{ margin: '3px 0 0', fontSize: 13 }}>Step {step} of 4 — {stepLabel}</p>
+              <p className="muted" style={{ margin: '3px 0 0', fontSize: 13 }}>Step {step} of 5 — {stepLabel}</p>
             </div>
             <button onClick={onClose} className="btn btn-sm" style={{ background: 'transparent', border: 0, padding: 4, cursor: 'pointer', color: 'rgba(18,23,36,.5)' }} aria-label="Close dialog">
               {I.close}
@@ -709,7 +719,7 @@ function AddContractorModal({ onClose, onSave }) {
         <div className="modal-body">
           {/* Step dots */}
           <div className="step-row" aria-hidden="true">
-            {[1,2,3,4].map(n => (
+            {[1,2,3,4,5].map(n => (
               <div key={n} className={`step-pip${n < step ? ' past' : n === step ? ' active' : ''}`} />
             ))}
           </div>
@@ -819,8 +829,39 @@ function AddContractorModal({ onClose, onSave }) {
             </div>
           )}
 
-          {/* ── Step 4: Review ────────────────────────────────── */}
+          {/* ── Step 4: Address ──────────────────────────────── */}
           {step === 4 && (
+            <div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="street1">Street Address</label>
+                <input id="street1" className="form-input" value={form.street1} onChange={set('street1')} placeholder="123 Main St" autoFocus />
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="street2">Apt, Suite, Unit <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional)</span></label>
+                <input id="street2" className="form-input" value={form.street2} onChange={set('street2')} placeholder="Apt 4B" />
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="city">City</label>
+                <input id="city" className="form-input" value={form.city} onChange={set('city')} placeholder="San Francisco" />
+              </div>
+              <div className="form-row-2 form-group">
+                <div>
+                  <label className="form-label" htmlFor="addr-state">State</label>
+                  <select id="addr-state" className="form-input" value={form.addrState} onChange={set('addrState')}>
+                    <option value="">Select state…</option>
+                    {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label" htmlFor="zip">ZIP Code</label>
+                  <input id="zip" className="form-input" value={form.zip} onChange={set('zip')} placeholder="94107" maxLength={10} />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── Step 5: Review ────────────────────────────────── */}
+          {step === 5 && (
             <div>
               <div className="card-s" style={{ marginBottom: 14, padding: '6px 16px' }}>
                 <div className="rev-row"><span className="rev-key">Type</span><span className="rev-val">{form.type}</span></div>
@@ -829,6 +870,7 @@ function AddContractorModal({ onClose, onSave }) {
                 <div className="rev-row"><span className="rev-key">Start Date</span><span className="rev-val">{fmtDate(form.startDate) || 'Today'}</span></div>
                 <div className="rev-row"><span className="rev-key">Work State</span><span className="rev-val">{form.workState}</span></div>
                 <div className="rev-row"><span className="rev-key">Compensation</span><span className="rev-val">${form.rate} {form.wageType === 'Hourly' ? '/ hr' : 'fixed'}</span></div>
+                <div className="rev-row"><span className="rev-key">Address</span><span className="rev-val" style={{ textAlign: 'right' }}>{form.street1}{form.street2 ? `, ${form.street2}` : ''}<br/>{form.city}, {form.addrState} {form.zip}</span></div>
                 <div className="rev-row"><span className="rev-key">Onboarding</span><span className="rev-val">{form.method === 'self' ? 'Self-onboarding invite' : 'Employer entry'}</span></div>
                 <div className="rev-row" style={{ borderBottom: 0 }}><span className="rev-key">New hire report</span><span className="rev-val">{form.fileNewHire ? 'Yes' : 'No'}</span></div>
               </div>
@@ -848,7 +890,7 @@ function AddContractorModal({ onClose, onSave }) {
           {step > 1 && (
             <button className="btn btn-secondary btn-sm" onClick={() => setStep(s => s - 1)} style={{ cursor: 'pointer' }}>Back</button>
           )}
-          {step < 4 ? (
+          {step < 5 ? (
             <button
               className="btn btn-primary btn-sm"
               onClick={() => setStep(s => s + 1)}
