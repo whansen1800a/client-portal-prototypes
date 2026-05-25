@@ -435,6 +435,12 @@ const I = {
       <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/>
     </svg>
   ),
+  runPayroll: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"/>
+      <polygon points="10 8 17 12 10 16 10 8" fill="currentColor" stroke="none"/>
+    </svg>
+  ),
 };
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -471,6 +477,11 @@ function Sidebar() {
           onClick={() => window.location.href = 'payroll-contractors.html'}
           style={{ cursor: 'pointer' }}>
           {I.contractor}<span>Contractors</span>
+        </div>
+        <div className="nav-child" role="button" tabIndex={0}
+          onClick={() => window.location.href = 'payroll-run.html'}
+          style={{ cursor: 'pointer' }}>
+          {I.runPayroll}<span>Run Payroll</span>
         </div>
 
         <div className="nav-section">Portal</div>
