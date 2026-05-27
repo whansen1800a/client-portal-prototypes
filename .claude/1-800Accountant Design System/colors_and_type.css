@@ -1,0 +1,328 @@
+/*
+ * 1-800Accountant — Core Design Tokens
+ * ----------------------------------------------------------------
+ * Source of truth: portal-web/src/variables/colors.ts
+ *                  portal-web/src/styles/ThemeCustom.tsx
+ *                  portal-web/src/components/common/ui/UiText.tsx
+ * Primary action color is warm orange (#F15F22). Portal-wide accents
+ * use teal/green (#2DA38D, #3B7A80). Typography is Poppins on Roboto
+ * fallback. Scale names are "vehicles" (bike → semi) — a 1-800A-ism.
+ */
+
+/* --------------------------------------------------------------- *
+ * 1. Web fonts — Poppins ships locally (brand-approved files in /fonts)
+ *    Roboto & Caveat stay on Google Fonts as fallbacks / accent.
+ * --------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Caveat:wght@400;500;600;700&display=swap');
+
+/* Poppins — official TTFs (weight axis 100–900, with italics) */
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-Thin.ttf') format('truetype');        font-weight:100; font-style:normal; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-ThinItalic.ttf') format('truetype');  font-weight:100; font-style:italic; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-ExtraLight.ttf') format('truetype');       font-weight:200; font-style:normal; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-ExtraLightItalic.ttf') format('truetype'); font-weight:200; font-style:italic; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-Light.ttf') format('truetype');       font-weight:300; font-style:normal; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-LightItalic.ttf') format('truetype'); font-weight:300; font-style:italic; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-Regular.ttf') format('truetype');     font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-Italic.ttf') format('truetype');      font-weight:400; font-style:italic; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-Medium.ttf') format('truetype');       font-weight:500; font-style:normal; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-MediumItalic.ttf') format('truetype'); font-weight:500; font-style:italic; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-SemiBold.ttf') format('truetype');       font-weight:600; font-style:normal; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-SemiBoldItalic.ttf') format('truetype'); font-weight:600; font-style:italic; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-Bold.ttf') format('truetype');       font-weight:700; font-style:normal; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-BoldItalic.ttf') format('truetype'); font-weight:700; font-style:italic; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-ExtraBold.ttf') format('truetype');       font-weight:800; font-style:normal; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-ExtraBoldItalic.ttf') format('truetype'); font-weight:800; font-style:italic; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-Black.ttf') format('truetype');       font-weight:900; font-style:normal; font-display:swap; }
+@font-face { font-family:'Poppins'; src:url('fonts/Poppins-BlackItalic.ttf') format('truetype'); font-weight:900; font-style:italic; font-display:swap; }
+
+@font-face {
+    font-family: 'LucidaHandwriting';
+    src: local('Lucida Handwriting'), local('Lucida Handwriting Italic');
+    font-display: swap;
+}
+
+/* --------------------------------------------------------------- *
+ * 2. Color tokens — lifted from src/variables/colors.ts
+ * --------------------------------------------------------------- */
+:root {
+    /* Brand */
+    --primary: #F15F22;            /* warm orange CTA */
+    --primary-disabled: #F0C4B6;
+    --secondary: #3F5261;          /* slate navy */
+    --tertiary: #3B7A80;           /* deep teal link/accent */
+    --primary-green: #2DA38D;      /* portal loader / scroll / tab indicator */
+    --white: #FFFFFF;
+    --black: #000000;
+
+    /* Oranges (primary family) */
+    --orange-100: #E54604;
+    --orange-200: #F34B04;
+    --orange-300: #FD5E2A;
+    --orange-400: #F3831A;
+    --orange-500: #DE571F;
+    --orange-600: #FB8301;
+    --orange-700: #FFF6E5;   /* tint background */
+
+    /* Teals / Greens (secondary family) */
+    --green-100: #3b7a80a6;
+    --green-200: #3B7A80;
+    --green-300: #1F7262;
+    --green-400: #148672;
+    --green-500: #DBF6E7;    /* selected nav row tint */
+    --green-600: #1CB05C;
+    --green-700: #274F54;
+    --green-800: #B5F885;
+    --green-1000: #3B7A801F;
+    --green-1200: #D2FFFA;
+    --green-1300: #C7E6E3;
+    --green-1400: #AAF2DC;
+    --green-1500: #D5FFFA;
+    --green-1700: #217D7D;
+    --green-1900: #23804E;
+
+    --teal-200: #89D3C6;
+    --teal-300: #087B9A;
+    --teal-600: #4FE1D1;
+    --teal-700: #D8E4E5;
+    --teal-800: #007064;
+
+    --cyan-100: #2DA38D29;
+    --cyan-200: #2DA38D14;
+
+    /* Blues (informational) */
+    --blue-200: #1776B6;         /* link color */
+    --blue-400: #154C79;
+    --blue-600: #0780A6;
+    --blue-800: #0090E6;
+    --blue-1100: #EBF3FF;
+    --blue-1300: #0065A0;
+
+    /* Reds (error/destructive) */
+    --red-100: #BE2436;
+    --red-200: #DE2644;
+    --red-400: #E0284A;         /* theme.palette.error.main */
+    --red-500: #F15A22;
+    --red-800: #C71D1D;
+    --red-900: #FFE6E6;
+    --red-1200: #FFF0F0;
+
+    /* Yellows (warning / highlight) */
+    --yellow-100: #FFCF7C;
+    --yellow-200: #FABD2129;
+    --yellow-700: #784E03;
+    --yellow-900: #A28700;
+
+    /* Neutrals — the portal uses a huge grey ramp, most on black-at-% */
+    --grey-100: #E7EAF0;
+    --grey-200: #12172433;       /* 20% black */
+    --grey-300: #C2CCDB;
+    --grey-400: #121724A6;       /* 65% black  */
+    --grey-500: #58595C;
+    --grey-600: #00000014;       /* 8% black — hover tint */
+    --grey-700: #0000001F;       /* 12% black — divider */
+    --grey-800: #1217246B;
+    --grey-900: #0000000A;       /* 4% black — lightest divider */
+    --grey-1200: #ECE8E2;        /* warm paper */
+    --grey-1500: #21212114;
+    --grey-1600: #F5F5F9;
+    --grey-1700: #12172480;
+    --grey-2000: #E0E0E0;
+    --grey-2100: #EFF7FD;
+    --grey-2400: #DCDCE6;
+    --grey-2500: #F6F4F2;
+    --grey-3300: #F7F7F7;
+
+    --black-100: #121724E8;
+    --black-200: #121724;        /* headings / body text */
+    --black-500: #000000DE;      /* 87% — MUI text.primary */
+
+    --beige-100: #EFE7DA;
+    --mint-100: #A9F2DC;
+
+    /* --------------------------------------------------------- *
+     * Semantic roles
+     * --------------------------------------------------------- */
+    --bg-app: var(--white);
+    --bg-surface: var(--white);
+    --bg-surface-muted: var(--grey-3300);       /* #F7F7F7 — page wells */
+    --bg-surface-warm: var(--grey-2500);        /* #F6F4F2 — cards on warm bg */
+    --bg-selected: var(--green-500);            /* #DBF6E7 — active nav row */
+    --bg-hover: var(--grey-600);                /* 8% black */
+
+    --fg-primary: var(--black-200);             /* #121724 */
+    --fg-secondary: var(--grey-400);            /* 65% black */
+    --fg-tertiary: var(--grey-1700);            /* 50% black */
+    --fg-disabled: var(--grey-800);
+    --fg-on-primary: var(--white);
+    --fg-link: var(--blue-200);                 /* MuiLink root */
+
+    --border-default: var(--grey-700);          /* 12% black */
+    --border-strong: var(--grey-200);           /* 20% black */
+    --border-subtle: var(--grey-900);           /* 4% black */
+
+    --status-success: var(--primary-green);
+    --status-success-bg: var(--green-500);
+    --status-warning: var(--yellow-700);
+    --status-warning-bg: var(--yellow-100);
+    --status-error: var(--red-400);
+    --status-error-bg: var(--red-1200);
+    --status-info: var(--blue-200);
+    --status-info-bg: var(--blue-1100);
+
+    /* --------------------------------------------------------- *
+     * 3. Typography (Poppins → Roboto fallback)
+     *    Variant names are the portal's "vehicle" scale (UiText.tsx)
+     * --------------------------------------------------------- */
+    --font-sans: 'Poppins', 'Roboto', -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    --font-script: 'Caveat', 'LucidaHandwriting', cursive; /* used in signatures & welcome touches */
+
+    --fw-light: 300;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+    --fw-extrabold: 800;
+
+    /* Base size */
+    font-size: 16px;
+
+    /* Vehicle scale — size / line-height / letter-spacing (rem) */
+    --t-bike-50-size: 0.625rem;    --t-bike-50-lh: 1rem;    --t-bike-50-ls: 0.05rem;
+    --t-moped-75-size: 0.75rem;    --t-moped-75-lh: 1rem;   --t-moped-75-ls: 0.045rem;
+    --t-motorcycle-90-size: 0.875rem; --t-motorcycle-90-lh: 1.25rem; --t-motorcycle-90-ls: 0.01rem;
+    --t-car-100-size: 1rem;        --t-car-100-lh: 1.5rem;  --t-car-100-ls: 0.01rem;
+    --t-hatchback-125-size: 1.125rem; --t-hatchback-125-lh: 1.5rem; --t-hatchback-125-ls: 0.01rem;
+    --t-suv-150-size: 1.5rem;      --t-suv-150-lh: 2rem;    --t-suv-150-ls: 0.0075rem;
+    --t-truck-175-size: 1.75rem;   --t-truck-175-lh: 2.5rem; --t-truck-175-ls: 0;
+    --t-van-225-size: 2.25rem;     --t-van-225-lh: 3rem;    --t-van-225-ls: 0;
+    --t-bus-350-size: 3.5rem;      --t-bus-350-lh: 4.5rem;  --t-bus-350-ls: 0;
+    --t-semi-450-size: 4.5rem;     --t-semi-450-lh: 7rem;   --t-semi-450-ls: 0;
+
+    /* --------------------------------------------------------- *
+     * 4. Spacing / radius / elevation
+     *    Portal spacing scale (theme.spacing): [4,8,12,16,24,32,40,48,56,64,72,80,96]
+     * --------------------------------------------------------- */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 40px;
+    --space-8: 48px;
+    --space-9: 56px;
+    --space-10: 64px;
+    --space-11: 72px;
+    --space-12: 80px;
+    --space-13: 96px;
+
+    --radius-sm: 4px;      /* MUI default, inputs, outlined buttons */
+    --radius-md: 8px;      /* modals, cards */
+    --radius-lg: 16px;     /* large surfaces */
+    --radius-xl: 32px;     /* "CurvedBox" AI dashboard hero panels */
+    --radius-pill: 999px;  /* chips, status pills */
+
+    /* MUI elevation presets used in the portal */
+    --elev-drawer: 0 1px 1px #00000024, 0 2px 1px #0000001F, 0 1px 3px #00000033;
+    --elev-menu:   0 8px 10px #00000024, 0 3px 14px #0000001F, 0 5px 5px #00000033;
+    --elev-card:   0 2px 4px rgba(18,23,36,0.06), 0 1px 2px rgba(18,23,36,0.04);
+    --elev-curved: 0 28px 80px rgba(8,83,115,0.12);   /* AI dashboard "CurvedBox" */
+    --elev-hover:  0 6px 16px rgba(18,23,36,0.10);
+
+    /* Motion */
+    --motion-fast: 120ms;
+    --motion-base: 180ms;
+    --motion-slow: 280ms;
+    --motion-ease: cubic-bezier(0.4, 0.0, 0.2, 1);  /* MUI standard */
+}
+
+/* --------------------------------------------------------------- *
+ * 5. Semantic element defaults
+ * --------------------------------------------------------------- */
+html, body {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    color: var(--fg-primary);
+    background: var(--bg-app);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+h1, .h1 {
+    font: var(--fw-semibold) var(--t-van-225-size)/var(--t-van-225-lh) var(--font-sans);
+    color: var(--fg-primary);
+    letter-spacing: var(--t-van-225-ls);
+    margin: 0 0 var(--space-4);
+}
+h2, .h2 {
+    font: var(--fw-semibold) var(--t-truck-175-size)/var(--t-truck-175-lh) var(--font-sans);
+    color: var(--fg-primary);
+    margin: 0 0 var(--space-4);
+}
+h3, .h3 {
+    font: var(--fw-semibold) var(--t-suv-150-size)/var(--t-suv-150-lh) var(--font-sans);
+    color: var(--fg-primary);
+    letter-spacing: var(--t-suv-150-ls);
+    margin: 0 0 var(--space-3);
+}
+h4, .h4 {
+    font: var(--fw-semibold) var(--t-hatchback-125-size)/var(--t-hatchback-125-lh) var(--font-sans);
+    color: var(--fg-primary);
+    margin: 0 0 var(--space-3);
+}
+h5, .h5 {
+    font: var(--fw-semibold) var(--t-car-100-size)/var(--t-car-100-lh) var(--font-sans);
+    color: var(--fg-primary);
+    margin: 0 0 var(--space-2);
+}
+h6, .h6, .eyebrow {
+    font: var(--fw-semibold) var(--t-motorcycle-90-size)/var(--t-motorcycle-90-lh) var(--font-sans);
+    color: var(--fg-secondary);
+    margin: 0 0 var(--space-2);
+}
+
+p, .body {
+    font: var(--fw-regular) var(--t-car-100-size)/var(--t-car-100-lh) var(--font-sans);
+    color: var(--fg-primary);
+    letter-spacing: var(--t-car-100-ls);
+    margin: 0 0 var(--space-3);
+}
+.body-sm {
+    font: var(--fw-regular) var(--t-motorcycle-90-size)/var(--t-motorcycle-90-lh) var(--font-sans);
+    color: var(--fg-primary);
+}
+.caption {
+    font: var(--fw-regular) var(--t-moped-75-size)/var(--t-moped-75-lh) var(--font-sans);
+    color: var(--fg-secondary);
+}
+.overline {
+    font: var(--fw-semibold) var(--t-bike-50-size)/var(--t-bike-50-lh) var(--font-sans);
+    color: var(--fg-secondary);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+a {
+    color: var(--fg-link);
+    text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+code, pre, .mono {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
+/* Utility to apply vehicle variants imperatively */
+.t-bike-50        { font-size: var(--t-bike-50-size); line-height: var(--t-bike-50-lh); letter-spacing: var(--t-bike-50-ls); }
+.t-moped-75       { font-size: var(--t-moped-75-size); line-height: var(--t-moped-75-lh); letter-spacing: var(--t-moped-75-ls); }
+.t-motorcycle-90  { font-size: var(--t-motorcycle-90-size); line-height: var(--t-motorcycle-90-lh); letter-spacing: var(--t-motorcycle-90-ls); }
+.t-car-100        { font-size: var(--t-car-100-size); line-height: var(--t-car-100-lh); letter-spacing: var(--t-car-100-ls); }
+.t-hatchback-125  { font-size: var(--t-hatchback-125-size); line-height: var(--t-hatchback-125-lh); letter-spacing: var(--t-hatchback-125-ls); }
+.t-suv-150        { font-size: var(--t-suv-150-size); line-height: var(--t-suv-150-lh); letter-spacing: var(--t-suv-150-ls); }
+.t-truck-175      { font-size: var(--t-truck-175-size); line-height: var(--t-truck-175-lh); }
+.t-van-225        { font-size: var(--t-van-225-size); line-height: var(--t-van-225-lh); }
+.t-bus-350        { font-size: var(--t-bus-350-size); line-height: var(--t-bus-350-lh); }
