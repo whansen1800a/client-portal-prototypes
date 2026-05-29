@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transactions — 1-800Accountant Client Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:          #F15F22;
+  --primary-disabled: #F0C4B6;
+  --secondary:        #3F5261;
+  --tertiary:         #3B7A80;
+  --primary-green:    #2DA38D;
+  --white:            #FFFFFF;
+  --black:            #000000;
+  --orange-100: #E54604;
+  --orange-500: #DE571F;
+  --orange-700: #FFF6E5;
+  --green-300:  #1F7262;
+  --green-400:  #148672;
+  --green-500:  #DBF6E7;
+  --green-600:  #1CB05C;
+  --blue-200:  #1776B6;
+  --blue-1100: #EBF3FF;
+  --red-400:   #E0284A;
+  --red-1200:  #FFF0F0;
+  --yellow-100: #FFCF7C;
+  --yellow-700: #784E03;
+  --grey-500:  #58595C;
+  --grey-700:  #0000001F;
+  --grey-900:  #0000000A;
+  --grey-1200: #ECE8E2;
+  --grey-2500: #F6F4F2;
+  --grey-3300: #F7F7F7;
+  --black-200: #121724;
+  --bg-app:           #F7F7F7;
+  --bg-surface:       #FFFFFF;
+  --bg-surface-warm:  #F6F4F2;
+  --bg-selected:      #DBF6E7;
+  --bg-hover:         #00000014;
+  --fg-primary:   #121724;
+  --fg-secondary: #121724A6;
+  --fg-tertiary:  #12172480;
+  --fg-disabled:  #1217246B;
+  --fg-on-primary: #FFFFFF;
+  --fg-link:      #1776B6;
+  --border-default: #0000001F;
+  --border-strong:  #12172433;
+  --border-subtle:  #0000000A;
+  --status-success:    #2DA38D;
+  --status-success-bg: #DBF6E7;
+  --status-warning:    #784E03;
+  --status-warning-bg: #FFCF7C;
+  --status-error:      #E0284A;
+  --status-error-bg:   #FFF0F0;
+  --status-info:       #1776B6;
+  --status-info-bg:    #EBF3FF;
+  --font-sans: 'Poppins', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: Menlo, 'source-code-pro', Monaco, Consolas, 'Courier New', monospace;
+  --fw-light:    300;
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --t-bike-50-size:       0.625rem;
+  --t-moped-75-size:      0.75rem;
+  --t-motorcycle-90-size: 0.875rem;
+  --t-car-100-size:       1rem;
+  --t-hatchback-125-size: 1.125rem;
+  --t-suv-150-size:       1.5rem;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   16px;
+  --radius-pill: 999px;
+  --elev-card:   0 2px 4px rgba(18,23,36,0.06), 0 1px 2px rgba(18,23,36,0.04);
+  --elev-menu:   0 8px 10px #00000024, 0 3px 14px #0000001F, 0 5px 5px #00000033;
+  --elev-hover:  0 6px 16px rgba(18,23,36,0.10);
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+  --motion-ease: cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-app);
+  color: var(--fg-primary);
+  display: flex;
+  min-height: 100vh;
+  font-size: var(--t-motorcycle-90-size);
+}
+
+/* ─── Sidebar ─── */
+.sidebar {
+  width: 248px;
+  min-height: 100vh;
+  background: var(--white);
+  border-right: 1px solid var(--border-default);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 20px var(--space-4) 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar-logo svg { display: block; }
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  color: var(--fg-tertiary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: var(--space-4) var(--space-4) var(--space-2);
+}
+
+.nav-list { list-style: none; padding: var(--space-2) 0; margin: 0; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px var(--space-4);
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--motion-ease);
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover { background: var(--bg-hover); }
+
+.nav-item.active {
+  background: var(--bg-selected);
+  border-left: 3px solid var(--primary-green);
+  padding-left: 13px;
+}
+
+.nav-item.active .nav-label {
+  color: var(--primary-green);
+  font-weight: var(--fw-medium);
+}
+
+.nav-item.active .nav-icon {
+  filter: invert(48%) sepia(79%) saturate(400%) hue-rotate(120deg) brightness(95%) contrast(90%);
+}
+
+.nav-icon { width: 20px; height: 20px; flex-shrink: 0; opacity: 0.75; }
+.nav-label { font-size: var(--t-motorcycle-90-size); color: var(--fg-secondary); }
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.sidebar-bottom-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 8px var(--space-2);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--motion-fast) var(--motion-ease);
+  font-size: var(--t-motorcycle-90-size);
+  color: var(--fg-secondary);
+}
+
+.sidebar-bottom-item:hover { background: var(--bg-hover); }
+
+/* ─── Main shell ─── */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+/* ─── Topbar ─── */
+.topbar {
+  height: 64px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-6);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar-left { display: flex; align-items: center; gap: var(--space-3); }
+.topbar-title { font-size: var(--t-hatchback-125-size); font-weight: var(--fw-semibold); color: var(--fg-primary); }
+
+.topbar-right { display: flex; align-items: center; gap: var(--space-3); }
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 36px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--bg-app);
+  width: 220px;
+  transition: border-color var(--motion-fast) var(--motion-ease);
+}
+
+.search-bar:focus-within { border-color: var(--primary-green); background: var(--white); }
+
+.search-bar input {
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: var(--t-motorcycle-90-size);
+  color: var(--fg-primary);
+  outline: none;
+  width: 100%;
+}
+
+.search-bar input::placeholder { color: var(--fg-tertiary); }
+
+.icon-btn {
+  width: 36px; height: 36px;
+  border: none; background: transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--motion-fast) var(--motion-ease);
+  position: relative;
+}
+
+.icon-btn:hover { background: var(--bg-hover); }
+
+.notif-dot {
+  position: absolute;
+  top: 5px; right: 5px;
+  width: 8px; height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  border: 1.5px solid var(--white);
+}
+
+.avatar {
+  width: 36px; height: 36px;
+  background: var(--secondary);
+  color: var(--white);
+  border-radius: var(--radius-pill);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--t-moped-75-size);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+}
+
+/* ─── Page content ─── */
+.page-content {
+  padding: var(--space-6) var(--space-6);
+  flex: 1;
+  max-width: 1120px;
+  width: 100%;
+}
+
+/* ─── Page header ─── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.page-header-left { display: flex; align-items: center; gap: var(--space-3); }
+
+.page-title {
+  font-size: var(--t-suv-150-size);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+.tab-row {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-default);
+  margin-bottom: var(--space-5);
+}
+
+.tab {
+  padding: 10px var(--space-4);
+  font-size: var(--t-motorcycle-90-size);
+  font-weight: var(--fw-medium);
+  color: var(--fg-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease);
+}
+
+.tab:hover { color: var(--fg-primary); }
+
+.tab.active {
+  color: var(--primary-green);
+  border-bottom-color: var(--primary-green);
+}
+
+/* ─── Filter bar ─── */
+.filter-bar {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elev-card);
+  padding: 0 var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: var(--space-3);
+  overflow-x: auto;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 12px var(--space-4);
+  font-size: var(--t-motorcycle-90-size);
+  color: var(--fg-secondary);
+  cursor: pointer;
+  border-right: 1px solid var(--border-default);
+  white-space: nowrap;
+  transition: background var(--motion-fast) var(--motion-ease);
+  user-select: none;
+}
+
+.filter-item:last-child { border-right: none; }
+.filter-item:hover { background: var(--bg-hover); }
+
+.filter-item.active {
+  color: var(--primary-green);
+  font-weight: var(--fw-medium);
+}
+
+.filter-chevron {
+  width: 16px; height: 16px; opacity: 0.5;
+}
+
+.filter-spacer { flex: 1; }
+
+.filter-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px var(--space-3);
+  cursor: pointer;
+  color: var(--fg-tertiary);
+  transition: color var(--motion-fast) var(--motion-ease);
+}
+.filter-more:hover { color: var(--fg-primary); }
+
+/* ─── Active filter chips ─── */
+.filter-chips {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  font-size: var(--t-moped-75-size);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+
+.filter-chip-x {
+  width: 14px; height: 14px;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0.6;
+}
+
+/* ─── List card ─── */
+.list-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elev-card);
+  overflow: hidden;
+}
+
+/* ─── List header (column labels) ─── */
+.list-header {
+  display: grid;
+  grid-template-columns: 36px 56px 1fr 200px 90px 110px 36px;
+  align-items: center;
+  padding: 10px var(--space-4);
+  border-bottom: 1px solid var(--border-default);
+  gap: var(--space-3);
+}
+
+.list-header-cell {
+  font-size: var(--t-moped-75-size);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.list-header-cell.right { text-align: right; }
+
+/* ─── Bulk actions bar ─── */
+.bulk-bar {
+  display: none;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px var(--space-4);
+  background: var(--bg-selected);
+  border-bottom: 1px solid var(--border-default);
+  font-size: var(--t-motorcycle-90-size);
+  color: var(--primary-green);
+  font-weight: var(--fw-medium);
+}
+
+.bulk-bar.visible { display: flex; }
+
+.bulk-count { margin-right: auto; }
+
+.bulk-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--primary-green);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--primary-green);
+  font-family: var(--font-sans);
+  font-size: var(--t-motorcycle-90-size);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--motion-ease);
+}
+
+.bulk-action:hover { background: var(--bg-selected); }
+
+/* ─── Transaction row ─── */
+.tx-row {
+  display: grid;
+  grid-template-columns: 36px 56px 1fr 200px 90px 110px 36px;
+  align-items: center;
+  padding: 12px var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  gap: var(--space-3);
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--motion-ease);
+}
+
+.tx-row:last-child { border-bottom: none; }
+.tx-row:hover { background: var(--bg-hover); }
+.tx-row.selected { background: #DBF6E740; }
+
+/* Checkbox */
+.tx-checkbox {
+  width: 16px; height: 16px;
+  accent-color: var(--primary-green);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Date */
+.tx-date {
+  font-size: var(--t-moped-75-size);
+  color: var(--fg-tertiary);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+
+/* Merchant */
+.tx-merchant {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.merchant-avatar {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-pill);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  color: var(--white);
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.merchant-info { min-width: 0; }
+
+.merchant-name {
+  font-size: var(--t-motorcycle-90-size);
+  font-weight: var(--fw-medium);
+  color: var(--fg-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.merchant-sub {
+  font-size: var(--t-moped-75-size);
+  color: var(--fg-tertiary);
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tx-badges {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.tx-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px; height: 18px;
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+}
+
+.tx-badge.reconciled { background: var(--status-success-bg); color: var(--status-success); }
+.tx-badge.transfer { background: var(--status-info-bg); color: var(--status-info); }
+.tx-badge.duplicate { background: var(--status-warning-bg); color: var(--status-warning); }
+
+/* Category */
+.tx-category {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.category-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.category-name {
+  font-size: var(--t-motorcycle-90-size);
+  color: var(--fg-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Actions */
+.tx-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--motion-ease);
+}
+
+.tx-row:hover .tx-actions { opacity: 1; }
+
+.action-btn {
+  width: 28px; height: 28px;
+  border: none; background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--motion-fast) var(--motion-ease);
+  color: var(--fg-tertiary);
+}
+
+.action-btn:hover { background: var(--bg-hover); color: var(--fg-primary); }
+
+/* Amount */
+.tx-amount {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--t-motorcycle-90-size);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+
+.tx-amount.positive { color: var(--green-400); }
+.tx-amount.negative { color: var(--fg-primary); }
+
+/* Arrow */
+.tx-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg-tertiary);
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--motion-ease);
+}
+
+.tx-row:hover .tx-arrow { opacity: 1; }
+
+/* ─── Month divider ─── */
+.month-divider {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--t-moped-75-size);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--bg-app);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ─── Summary footer ─── */
+.list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--border-default);
+  font-size: var(--t-moped-75-size);
+  color: var(--fg-tertiary);
+}
+
+.list-footer-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--t-motorcycle-90-size);
+}
+
+.footer-total {
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+/* ─── Btn primary ─── */
+.btn-primary {
+  height: 36px; padding: 0 16px;
+  background: var(--primary); color: var(--white);
+  border: none; border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: var(--t-motorcycle-90-size);
+  font-weight: var(--fw-medium); cursor: pointer;
+  transition: background var(--motion-fast) var(--motion-ease);
+  display: flex; align-items: center; gap: var(--space-2);
+}
+
+.btn-primary:hover { background: var(--orange-500); }
+
+.btn-secondary {
+  height: 36px; padding: 0 16px;
+  background: var(--white); color: var(--secondary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: var(--t-motorcycle-90-size);
+  font-weight: var(--fw-medium); cursor: pointer;
+  display: flex; align-items: center; gap: var(--space-2);
+  transition: background var(--motion-fast) var(--motion-ease);
+}
+
+.btn-secondary:hover { background: var(--bg-hover); }
+
+/* ─── Pagination ─── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-4);
+  font-size: var(--t-moped-75-size);
+  color: var(--fg-tertiary);
+}
+
+.pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.page-btn {
+  width: 28px; height: 28px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  font-family: var(--font-sans);
+  font-size: var(--t-moped-75-size);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--fg-secondary);
+  transition: all var(--motion-fast) var(--motion-ease);
+}
+
+.page-btn:hover { border-color: var(--primary-green); color: var(--primary-green); }
+.page-btn.active { background: var(--primary-green); color: var(--white); border-color: var(--primary-green); }
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<!-- ─── Sidebar ─── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <!-- 1-800Accountant wordmark (truncated to fit) -->
+    <svg width="148" height="37" viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M14.3427 83.1208C13.2528 82.4965 12.2972 81.6623 11.5309 80.6663C10.7647 79.6704 10.2029 78.5324 9.87817 77.318C9.55341 76.1036 9.47203 74.8369 9.63872 73.5909C9.80541 72.3448 10.2169 71.1442 10.8494 70.0582L39.5117 20.3357C40.7731 18.1342 42.8563 16.5244 45.3032 15.8606C47.7501 15.1968 50.3601 15.5333 52.5592 16.7962C54.7582 18.059 56.3661 20.1447 57.0291 22.5945C57.6921 25.0442 57.356 27.6573 56.0946 29.8589H56.0525L27.3902 79.5813C26.7701 80.6759 25.9395 81.6367 24.9463 82.4081C23.9531 83.1795 22.817 83.7461 21.6038 84.0752C20.3905 84.4044 19.1241 84.4895 17.8778 84.3257C16.6315 84.1618 15.43 83.7523 14.3427 83.1208ZM2.55793 65.2545C0.821671 68.2709-0.0614528 71.7037 0.00332376 75.1845C0.0681003 78.6654 1.07833 82.0628 2.92562 85.0124C4.77291 87.962 7.38752 90.3523 10.4889 91.9269C13.5903 93.5015 17.0614 94.201 20.5298 93.9502H76.5076C81.5792 93.939 86.4394 91.9141 90.0217 88.3198C93.604 84.7254 95.6158 79.8552 95.6158 74.7776C95.6269 71.4359 94.7557 68.1506 93.0905 65.2545H93.1326L64.7228 16.2484C63.1307 13.2177 60.757 10.6691 57.8482 8.86765C54.9395 7.06616 51.6019 6.07749 48.1824 6.00437C44.7629 5.93126 41.3862 6.77637 38.4033 8.45188C35.4203 10.1274 32.9401 12.5721 31.2203 15.5321L2.55793 65.2545ZM64.3861 34.5783V34.6625L52.3066 55.6471H76.5917L64.3861 34.5783ZM46.7509 65.2123L35.6816 84.3428H76.5076C79.0415 84.3428 81.4716 83.335 83.2633 81.5412C85.0551 79.7474 86.0617 77.3144 86.0617 74.7776C86.0617 72.2407 85.0551 69.8077 83.2633 68.0139C81.4716 66.2201 79.0415 65.2123 76.5076 65.2123H46.7509Z" fill="url(#logo-grad)"/>
+      <defs>
+        <linearGradient id="logo-grad" x1="33.7908" y1="99.3358" x2="72.2558" y2="23.6034" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#EF8A31"/>
+          <stop offset="0.52" stop-color="#F29F2E"/>
+          <stop offset="0.98" stop-color="#F5BA27"/>
+        </linearGradient>
+      </defs>
+      <path d="M138.377 82.6134H133.832C133.607 82.6384 133.379 82.6178 133.162 82.5526C132.945 82.4875 132.743 82.3791 132.569 82.2341C132.249 81.9974 132.002 81.6765 131.854 81.3071L129.455 74.8179H116.365L113.966 81.3071C113.845 81.6683 113.608 81.9794 113.293 82.192C113.127 82.3392 112.934 82.4522 112.724 82.5245C112.515 82.5968 112.293 82.627 112.072 82.6134H107.442L119.9 50.8837H125.919L138.377 82.6134ZM127.981 70.6463L124.109 60.0697C123.899 59.6062 123.731 59.0584 123.52 58.4264C123.31 57.7943 123.099 57.078 122.889 56.3195C122.728 57.0314 122.532 57.7346 122.299 58.4264C122.136 58.9993 121.94 59.5621 121.71 60.1119L117.88 70.6463H127.981Z" fill="#4C6C7C"/>
+      <path d="M287.203 50.8837V82.6134H284.172C283.768 82.6458 283.362 82.5733 282.994 82.4027C282.652 82.1936 282.352 81.922 282.11 81.6021L265.569 60.449C265.653 61.4181 265.695 62.303 265.695 63.1458V82.6134H260.476V50.8837H264.222L264.727 51.0101L265.106 51.3051L265.569 51.8108L282.152 73.0481C282.11 72.5425 282.11 72.0368 282.068 71.5312C282.026 71.0255 282.026 70.562 282.026 70.1406V50.8837H287.203Z" fill="#4C6C7C"/>
+    </svg>
+  </div>
+
+  <ul class="nav-list">
+    <li class="nav-item">
+      <span class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.75"><path fill-rule="evenodd" clip-rule="evenodd" d="M1 2C1 1.44772 1.44772 1 2 1H8C8.55228 1 9 1.44772 9 2V8C9 8.55228 8.55228 9 8 9H2C1.44772 9 1 8.55228 1 8V2ZM3 3V7H7V3H3Z" fill="#33485C"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11 2C11 1.44772 11.4477 1 12 1H18C18.5523 1 19 1.44772 19 2V8C19 8.55228 18.5523 9 18 9H12C11.4477 9 11 8.55228 11 8V2ZM13 3V7H17V3H13Z" fill="#33485C"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11 12C11 11.4477 11.4477 11 12 11H18C18.5523 11 19 11.4477 19 12V18C19 18.5523 18.5523 19 18 19H12C11.4477 19 11 18.5523 11 18V12ZM13 13V17H17V13H13Z" fill="#33485C"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 11.4477 1.44772 11 2 11H8C8.55228 11 9 11.4477 9 12V18C9 18.5523 8.55228 19 8 19H2C1.44772 19 1 18.5523 1 18V12ZM3 13V17H7V13H3Z" fill="#33485C"/></g></svg>
+      </span>
+      <span class="nav-label">Dashboard</span>
+    </li>
+    <li class="nav-item active">
+      <span class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.75"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.41666 15.1667C5.12934 15.1667 4.85379 15.2808 4.65063 15.484C4.44746 15.6872 4.33333 15.9627 4.33333 16.25C4.33333 16.8023 3.88561 17.25 3.33333 17.25C2.78104 17.25 2.33333 16.8023 2.33333 16.25C2.33333 15.4323 2.65818 14.648 3.23642 14.0698C3.81465 13.4915 4.59891 13.1667 5.41666 13.1667H16.6667C17.2189 13.1667 17.6667 13.6144 17.6667 14.1667C17.6667 14.719 17.2189 15.1667 16.6667 15.1667H5.41666Z" fill="#33485C"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.41666 2.66669C5.12934 2.66669 4.85379 2.78082 4.65063 2.98399C4.44746 3.18715 4.33333 3.4627 4.33333 3.75002V16.25C4.33333 16.5373 4.44746 16.8129 4.65063 17.0161C4.85379 17.2192 5.12934 17.3334 5.41666 17.3334H15.6667V2.66669H5.41666ZM5.41666 0.666687H16.6667C17.2189 0.666687 17.6667 1.1144 17.6667 1.66669V18.3334C17.6667 18.8856 17.2189 19.3334 16.6667 19.3334H5.41666C4.59891 19.3334 3.81465 19.0085 3.23642 18.4303C2.65818 17.852 2.33333 17.0678 2.33333 16.25V3.75002C2.33333 2.93227 2.65818 2.14801 3.23642 1.56977C3.81465 0.991537 4.59891 0.666687 5.41666 0.666687Z" fill="#33485C"/></g></svg>
+      </span>
+      <span class="nav-label">Bookkeeping</span>
+    </li>
+    <li class="nav-item">
+      <span class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.75"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.5404 3.45955C16.931 3.85007 16.931 4.48324 16.5404 4.87376L4.87378 16.5404C4.48325 16.931 3.85009 16.931 3.45956 16.5404C3.06904 16.1499 3.06904 15.5167 3.45956 15.1262L15.1262 3.45955C15.5168 3.06903 16.1499 3.06903 16.5404 3.45955Z" fill="#33485C"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.41666 4.33334C4.81835 4.33334 4.33333 4.81837 4.33333 5.41668C4.33333 6.01499 4.81835 6.50001 5.41666 6.50001C6.01497 6.50001 6.49999 6.01499 6.49999 5.41668C6.49999 4.81837 6.01497 4.33334 5.41666 4.33334ZM2.33333 5.41668C2.33333 3.7138 3.71378 2.33334 5.41666 2.33334C7.11954 2.33334 8.49999 3.7138 8.49999 5.41668C8.49999 7.11955 7.11954 8.50001 5.41666 8.50001C3.71378 8.50001 2.33333 7.11955 2.33333 5.41668Z" fill="#33485C"/><path fill-rule="evenodd" clip-rule="evenodd" d="M14.5833 13.5C13.985 13.5 13.5 13.985 13.5 14.5833C13.5 15.1816 13.985 15.6667 14.5833 15.6667C15.1816 15.6667 15.6667 15.1816 15.6667 14.5833C15.6667 13.985 15.1816 13.5 14.5833 13.5ZM11.5 14.5833C11.5 12.8805 12.8805 11.5 14.5833 11.5C16.2862 11.5 17.6667 12.8805 17.6667 14.5833C17.6667 16.2862 16.2862 17.6667 14.5833 17.6667C12.8805 17.6667 11.5 16.2862 11.5 14.5833Z" fill="#33485C"/></g></svg>
+      </span>
+      <span class="nav-label">Taxes</span>
+    </li>
+    <li class="nav-item">
+      <span class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.75" clip-path="url(#pc0)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10 -0.166656C10.5523 -0.166656 11 0.281059 11 0.833344V19.1667C11 19.719 10.5523 20.1667 10 20.1667C9.44772 20.1667 9 19.719 9 19.1667V0.833344C9 0.281059 9.44772 -0.166656 10 -0.166656Z" fill="#33485C"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14717 4.31382C5.88168 3.5793 6.8779 3.16666 7.91667 3.16666H14.1667C14.719 3.16666 15.1667 3.61437 15.1667 4.16666C15.1667 4.71894 14.719 5.16666 14.1667 5.16666H7.91667C7.40834 5.16666 6.92082 5.36859 6.56138 5.72804C6.20193 6.08748 6 6.57499 6 7.08332C6 7.59165 6.20193 8.07917 6.56138 8.43861C6.92082 8.79806 7.40834 8.99999 7.91667 8.99999H12.0833C13.1221 8.99999 14.1183 9.41264 14.8528 10.1472C15.5874 10.8817 16 11.8779 16 12.9167C16 13.9554 15.5874 14.9516 14.8528 15.6862C14.1183 16.4207 13.1221 16.8333 12.0833 16.8333H5C4.44772 16.8333 4 16.3856 4 15.8333C4 15.281 4.44772 14.8333 5 14.8333H12.0833C12.5917 14.8333 13.0792 14.6314 13.4386 14.2719C13.7981 13.9125 14 13.425 14 12.9167C14 12.4083 13.7981 11.9208 13.4386 11.5614C13.0792 11.2019 12.5917 11 12.0833 11H7.91667C6.8779 11 5.88168 10.5873 5.14717 9.85283C4.41265 9.11831 4 8.12209 4 7.08332C4 6.04456 4.41265 5.04834 5.14717 4.31382Z" fill="#33485C"/></g><defs><clipPath id="pc0"><rect width="20" height="20" fill="white"/></clipPath></defs></svg>
+      </span>
+      <span class="nav-label">Payroll</span>
+    </li>
+    <li class="nav-item">
+      <span class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.75"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.16667 8.5C8.79848 8.5 8.5 8.79848 8.5 9.16667V16.6667C8.5 17.0349 8.79848 17.3333 9.16667 17.3333H16.6667C17.0349 17.3333 17.3333 17.0349 17.3333 16.6667V9.16667C17.3333 8.79848 17.0349 8.5 16.6667 8.5H9.16667ZM6.5 9.16667C6.5 7.69391 7.69391 6.5 9.16667 6.5H16.6667C18.1394 6.5 19.3333 7.69391 19.3333 9.16667V16.6667C19.3333 18.1394 18.1394 19.3333 16.6667 19.3333H9.16667C7.69391 19.3333 6.5 18.1394 6.5 16.6667V9.16667Z" fill="#33485C"/><path fill-rule="evenodd" clip-rule="evenodd" d="M3.33333 2.66666C3.15652 2.66666 2.98695 2.73689 2.86193 2.86192C2.7369 2.98694 2.66666 3.15651 2.66666 3.33332V10.8333C2.66666 11.0101 2.7369 11.1797 2.86193 11.3047C2.98695 11.4298 3.15652 11.5 3.33333 11.5H4.16666C4.71895 11.5 5.16666 11.9477 5.16666 12.5C5.16666 13.0523 4.71895 13.5 4.16666 13.5H3.33333C2.62609 13.5 1.94781 13.219 1.44771 12.7189C0.947616 12.2188 0.666664 11.5406 0.666664 10.8333V3.33332C0.666664 2.62608 0.947616 1.9478 1.44771 1.4477C1.94781 0.947608 2.62609 0.666656 3.33333 0.666656H10.8333C11.5406 0.666656 12.2189 0.947608 12.7189 1.4477C13.219 1.9478 13.5 2.62608 13.5 3.33332V4.16666C13.5 4.71894 13.0523 5.16666 12.5 5.16666C11.9477 5.16666 11.5 4.71894 11.5 4.16666V3.33332C11.5 3.15651 11.4298 2.98694 11.3047 2.86192C11.1797 2.73689 11.0101 2.66666 10.8333 2.66666H3.33333Z" fill="#33485C"/></g></svg>
+      </span>
+      <span class="nav-label">Advisory</span>
+    </li>
+    <li class="nav-item">
+      <span class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.75"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.55278 0.772229C9.83431 0.631466 10.1657 0.631466 10.4472 0.772229L18.7805 4.9389C19.1193 5.10829 19.3333 5.45455 19.3333 5.83332C19.3333 6.2121 19.1193 6.55836 18.7805 6.72775L10.4472 10.8944C10.1657 11.0352 9.83431 11.0352 9.55278 10.8944L1.21945 6.72775C0.880667 6.55836 0.666664 6.2121 0.666664 5.83332C0.666664 5.45455 0.880667 5.10829 1.21945 4.9389L9.55278 0.772229ZM3.90273 5.83332L10 8.88196L16.0973 5.83332L10 2.78469L3.90273 5.83332Z" fill="#33485C"/><path fill-rule="evenodd" clip-rule="evenodd" d="M0.772242 13.7194C1.01923 13.2255 1.6199 13.0252 2.11388 13.2722L10 17.2153L17.8861 13.2722C18.3801 13.0252 18.9808 13.2255 19.2278 13.7194C19.4748 14.2134 19.2745 14.8141 18.7806 15.0611L10.4472 19.2278C10.1657 19.3685 9.83432 19.3685 9.55279 19.2278L1.21946 15.0611C0.725477 14.8141 0.525253 14.2134 0.772242 13.7194Z" fill="#33485C"/><path fill-rule="evenodd" clip-rule="evenodd" d="M0.772242 9.55279C1.01923 9.05881 1.6199 8.85859 2.11388 9.10558L10 13.0486L17.8861 9.10558C18.3801 8.85859 18.9808 9.05881 19.2278 9.55279C19.4748 10.0468 19.2745 10.6474 18.7806 10.8944L10.4472 15.0611C10.1657 15.2019 9.83432 15.2019 9.55279 15.0611L1.21946 10.8944C0.725478 10.6474 0.525253 10.0468 0.772242 9.55279Z" fill="#33485C"/></g></svg>
+      </span>
+      <span class="nav-label">Documents</span>
+    </li>
+  </ul>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-bottom-item">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" opacity="0.6"><path d="M18 15.5H2.99999C2.55999 15.5 2.16999 15.21 2.03999 14.79C1.90999 14.37 2.07999 13.91 2.43999 13.67C2.43999 13.67 4.48999 12.12 4.48999 7C4.48999 5.4 5.10999 3.89 6.24999 2.76C7.38999 1.62 8.89999 1 10.5 1C12.1 1 13.61 1.62 14.74 2.76C15.88 3.89 16.5 5.4 16.5 7C16.5 12.12 18.55 13.66 18.57 13.68C18.92 13.93 19.08 14.39 18.94 14.8C18.81 15.22 18.43 15.5 18 15.5Z" fill="#33485C"/></svg>
+      <span>Notifications</span>
+    </div>
+    <div class="sidebar-bottom-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" opacity="0.6"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C11.7348 2 11.4804 2.10536 11.2929 2.29289C11.1054 2.48043 11 2.73478 11 3V3.17399C10.9979 3.6908 10.8448 4.19572 10.5594 4.62661C10.2741 5.0575 9.86895 5.39555 9.39393 5.59914C9.30938 5.63538 9.22042 5.65969 9.12961 5.67157C8.69798 5.82272 8.23333 5.85998 7.781 5.77796C7.26 5.68349 6.77925 5.43512 6.40073 5.06486L6.39285 5.05715L6.33289 4.99711C6.14535 4.80957 5.89101 4.70421 5.625 4.70343C5.35899 4.70343 5.10464 4.80878 4.9171 4.99632L4.91671 4.9975C4.82374 5.09037 4.74998 5.20066 4.69965 5.32206C4.64933 5.44346 4.62343 5.57358 4.62343 5.705C4.62343 5.83642 4.64933 5.96654 4.69965 6.08794C4.74998 6.20934 4.82374 6.31963 4.91671 6.4125L4.98491 6.48069C5.35516 6.85921 5.60349 7.34 5.69796 7.861C5.79055 8.37163 5.73113 8.89797 5.52745 9.37478C5.34189 9.86133 5.01698 10.2827 4.59305 10.5859C4.16054 10.8952 3.64498 11.0673 3.11338 11.0797L3.09 11.08H3C2.73478 11.08 2.48043 11.1854 2.29289 11.3729C2.10536 11.5604 2 11.8148 2 12.08C2 12.3452 2.10536 12.5996 2.29289 12.7871C2.48043 12.9746 2.73478 13.08 3 13.08H3.17399C3.6908 13.0821 4.19572 13.2352 4.62661 13.5206C5.05601 13.8049 5.3932 14.2082 5.59701 14.6811C5.80908 15.1643 5.87211 15.6998 5.77796 16.219C5.68349 16.74 5.43512 17.2207 5.06486 17.5993L5.05715 17.6072L4.9971 17.6671C4.72949 17.935 4.70343 18.375 4.70343 18.375C4.70343 18.5064 4.72933 18.6365 4.77965 18.7579C4.82998 18.8793 4.90374 18.9896 4.99671 19.0825L4.9975 19.0833C5.09037 19.1763 5.20066 19.25 5.32206 19.3003C5.44346 19.3507 5.57359 19.3766 5.705 19.3766C5.83641 19.3766 5.96654 19.3507 6.08794 19.3003C6.20934 19.25 6.31963 19.1763 6.4125 19.0833L6.48069 19.0151C6.85921 18.6448 7.34 18.3965 7.861 18.302C8.37163 18.2095 8.89796 18.2689 9.37477 18.4725C9.86132 18.6581 10.2827 18.983 10.5859 19.407C10.8952 19.8395 11.0673 20.355 11.0797 20.8866L11.08 20.91V21C11.08 21.2652 11.1854 21.5196 11.3729 21.7071C11.5604 21.8946 11.8148 22 12.08 22C12.3452 22 12.5996 21.8946 12.7871 21.7071C12.9746 21.5196 13.08 21.2652 13.08 21V20.826C13.0821 20.3092 13.2352 19.8043 13.5206 19.3734C13.805 18.944 14.2083 18.6067 14.6812 18.4029C15.1643 18.1909 15.6998 18.1279 16.219 18.222C16.74 18.3165 17.2207 18.5649 17.5993 18.9351L17.6071 18.9429L17.6671 19.0029C17.76 19.0959 17.8707 19.17 17.9921 19.2203C18.1135 19.2707 18.2436 19.2966 18.375 19.2966C18.5064 19.2966 18.6365 19.2707 18.7579 19.2203C18.8793 19.17 18.9896 19.0963 19.0825 19.0033L19.0833 19.0025C19.1763 18.9096 19.25 18.7993 19.3003 18.6779C19.3507 18.5565 19.3766 18.4264 19.3766 18.295C19.3766 18.1636 19.3507 18.0335 19.3003 17.9121C19.25 17.7907 19.1763 17.6804 19.0833 17.5875L19.0151 17.5193C18.6448 17.1408 18.3965 16.66 18.302 16.139C18.2079 15.6198 18.2709 15.0843 18.4829 14.6012C18.6867 14.1283 19.024 13.725 19.4534 13.4406C19.8843 13.1552 20.3892 13.0021 20.906 13L20.91 13L21 13C21.2652 13 21.5196 12.8946 21.7071 12.7071C21.8946 12.5196 22 12.2652 22 12C22 11.7348 21.8946 11.4804 21.7071 11.2929C21.5196 11.1054 21.2652 11 21 11H20.826C20.3092 10.9979 19.8043 10.8448 19.3734 10.5594C18.9425 10.2741 18.6045 9.86896 18.4009 9.39393C18.2625 9.05938 18.2284 8.69042 18.3284 9.12961C18.1773 8.69798 18.14 8.23332 18.222 7.781C18.3165 7.26 18.5649 6.77925 18.9351 6.40073L18.9428 6.39285L19.0029 6.3329C19.29 6.0455 19.2966 5.625 19.2966 5.625C19.2966 5.49359 19.2707 5.36346 19.2203 5.24206C19.17 5.12066 19.0963 5.01037 19.0033 4.9175L19.0025 4.91671C18.9096 4.82374 18.7993 4.74998 18.6779 4.69965C18.5565 4.64933 18.4264 4.62343 18.295 4.62343C18.1636 4.62343 18.0335 4.64933 17.9121 4.69965C17.7907 4.74998 17.6804 4.82374 17.5875 4.91671L17.5193 4.98491C17.1408 5.35516 16.66 5.60349 16.139 5.69796C15.62 5.79211 15.084 5.7291 14.601 5.517C14.128 5.313 13.725 4.976 13.441 4.547C13.155 4.116 13.002 3.611 13 3.094L13 3.09V3C13 2.73478 12.8946 2.48043 12.7071 2.29289C12.5196 2.10536 12.2652 2 12 2ZM10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12Z" fill="#121724" fill-opacity="0.4"/></svg>
+      <span>Settings</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ─── Main area ─── -->
+<div class="main">
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title">Transactions</div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-bar">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" opacity="0.4">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M6.5 1a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM0 6.5a6.5 6.5 0 1111.613 4.027l3.43 3.43a.75.75 0 11-1.06 1.06l-3.43-3.43A6.5 6.5 0 010 6.5z" fill="#121724"/>
+        </svg>
+        <input type="text" placeholder="Search transactions">
+      </div>
+      <button class="icon-btn">
+        <span class="notif-dot"></span>
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M18 15.5H2.99999C2.55999 15.5 2.16999 15.21 2.03999 14.79C1.90999 14.37 2.07999 13.91 2.43999 13.67C2.43999 13.67 4.48999 12.12 4.48999 7C4.48999 5.4 5.10999 3.89 6.24999 2.76C7.38999 1.62 8.89999 1 10.5 1C12.1 1 13.61 1.62 14.74 2.76C15.88 3.89 16.5 5.4 16.5 7C16.5 12.12 18.55 13.66 18.57 13.68C18.92 13.93 19.08 14.39 18.94 14.8C18.81 15.22 18.43 15.5 18 15.5ZM5.08999 13.5H15.91C15.19 12.22 14.5 10.17 14.5 7C14.5 5.93 14.08 4.93 13.33 4.17C11.82 2.66 9.17999 2.66 7.66999 4.17C6.92999 4.92 6.49999 5.95 6.49999 7C6.49999 10.17 5.80999 12.22 5.08999 13.5Z" fill="#33485C"/></svg>
+      </button>
+      <div class="avatar">SC</div>
+    </div>
+  </header>
+
+  <!-- Page content -->
+  <div class="page-content">
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="page-header-left">
+        <!-- breadcrumb hint -->
+        <span style="font-size:var(--t-moped-75-size);color:var(--fg-tertiary);">Bookkeeping</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" opacity="0.4"><path d="M4 2L8 6L4 10" stroke="#121724" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size:var(--t-moped-75-size);color:var(--fg-secondary);font-weight:500;">Transactions</span>
+      </div>
+      <div style="display:flex;gap:var(--space-3);align-items:center;">
+        <button class="btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1v14M1 8h14" stroke="#3F5261" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Add transaction
+        </button>
+        <button class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 1a7 7 0 100 14A7 7 0 008 1zm.75 4.25a.75.75 0 00-1.5 0v2.5H4.75a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5H8.75v-2.5z" fill="white"/></svg>
+          Sync from bank
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-row">
+      <div class="tab active">Active</div>
+      <div class="tab">Excluded</div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <div class="filter-item">
+        All dates
+        <svg class="filter-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#121724" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="filter-item active">
+        Business expenses
+        <svg class="filter-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#2DA38D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="filter-item">
+        All accounts
+        <svg class="filter-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#121724" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="filter-item">
+        All amounts
+        <svg class="filter-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#121724" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="filter-spacer"></div>
+      <div style="display:flex;align-items:center;gap:var(--space-2);padding:8px var(--space-3);cursor:pointer;font-size:var(--t-motorcycle-90-size);color:var(--fg-secondary);">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M4 8h8M6 12h4" stroke="#121724" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.5"/></svg>
+        Filters
+        <span style="background:var(--primary);color:white;border-radius:999px;font-size:10px;font-weight:600;padding:1px 6px;">1</span>
+      </div>
+      <div class="filter-more">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="3" r="1.5" fill="currentColor"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/><circle cx="8" cy="13" r="1.5" fill="currentColor"/></svg>
+      </div>
+    </div>
+
+    <!-- Active filter chip -->
+    <div class="filter-chips">
+      <span class="filter-chip">
+        Category: Business expenses
+        <span class="filter-chip-x">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </span>
+      </span>
+      <span style="font-size:var(--t-moped-75-size);color:var(--fg-tertiary);cursor:pointer;padding:4px 6px;">Clear all</span>
+    </div>
+
+    <!-- Bulk bar (shows when items selected) -->
+    <div class="list-card">
+      <div class="bulk-bar" id="bulkBar">
+        <span class="bulk-count" id="bulkCount">3 transactions selected</span>
+        <button class="bulk-action">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M4 7h8M6 10h4" stroke="#2DA38D" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Categorize
+        </button>
+        <button class="bulk-action">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2v12" stroke="#2DA38D" stroke-width="1.5" stroke-linecap="round" transform="rotate(45 8 8)"/></svg>
+          Exclude
+        </button>
+      </div>
+
+      <!-- Column headers -->
+      <div class="list-header">
+        <input type="checkbox" class="tx-checkbox" id="selectAll" onchange="toggleAll(this)">
+        <div class="list-header-cell">Date</div>
+        <div class="list-header-cell">Merchant</div>
+        <div class="list-header-cell">Category</div>
+        <div class="list-header-cell">Status</div>
+        <div class="list-header-cell right">Amount</div>
+        <div></div>
+      </div>
+
+      <!-- Month: May 2026 -->
+      <div class="month-divider">May 2026</div>
+
+      <!-- Transaction rows -->
+      <div class="tx-row" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">May 27</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#4A90D9;">QBO</div>
+          <div class="merchant-info">
+            <div class="merchant-name">QuickBooks Online</div>
+            <div class="merchant-sub">Chase ···· 4821</div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#7C3AED;"></div>
+          <span class="category-name">Software &amp; subscriptions</span>
+        </div>
+        <div class="tx-badges">
+          <span class="tx-badge reconciled">R</span>
+        </div>
+        <div class="tx-amount negative">$35.00</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="tx-row" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">May 27</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#E54604;">AM</div>
+          <div class="merchant-info">
+            <div class="merchant-name">Amazon Business</div>
+            <div class="merchant-sub">Chase ···· 4821</div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#0780A6;"></div>
+          <span class="category-name">Office supplies</span>
+        </div>
+        <div class="tx-badges"></div>
+        <div class="tx-amount negative">$142.87</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="tx-row selected" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" checked onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">May 26</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#148672;">GA</div>
+          <div class="merchant-info">
+            <div class="merchant-name">Google Ads</div>
+            <div class="merchant-sub">BOA ···· 2203 &nbsp;·&nbsp; <span style="color:var(--status-warning);font-weight:500;">Needs review</span></div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#F15F22;"></div>
+          <span class="category-name" style="color:var(--fg-tertiary);font-style:italic;">Uncategorized</span>
+        </div>
+        <div class="tx-badges"></div>
+        <div class="tx-amount negative">$380.00</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="tx-row" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">May 26</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#3F5261;">ZM</div>
+          <div class="merchant-info">
+            <div class="merchant-name">Zoom</div>
+            <div class="merchant-sub">Chase ···· 4821</div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#7C3AED;"></div>
+          <span class="category-name">Software &amp; subscriptions</span>
+        </div>
+        <div class="tx-badges">
+          <span class="tx-badge reconciled">R</span>
+        </div>
+        <div class="tx-amount negative">$16.99</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="tx-row" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">May 25</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#1776B6;">CL</div>
+          <div class="merchant-info">
+            <div class="merchant-name">Client payment — Acme Corp</div>
+            <div class="merchant-sub">Chase ···· 4821</div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#148672;"></div>
+          <span class="category-name">Business income</span>
+        </div>
+        <div class="tx-badges">
+          <span class="tx-badge reconciled">R</span>
+        </div>
+        <div class="tx-amount positive">+$4,500.00</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="tx-row" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">May 25</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#C71D1D;">MR</div>
+          <div class="merchant-info">
+            <div class="merchant-name">Morton's The Steakhouse</div>
+            <div class="merchant-sub">Amex ···· 9001</div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#F34B04;"></div>
+          <span class="category-name">Meals &amp; entertainment</span>
+        </div>
+        <div class="tx-badges"></div>
+        <div class="tx-amount negative">$213.40</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="tx-row selected" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" checked onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">May 24</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#274F54;">SL</div>
+          <div class="merchant-info">
+            <div class="merchant-name">Slack Technologies</div>
+            <div class="merchant-sub">Chase ···· 4821 &nbsp;·&nbsp; <span style="color:var(--status-warning);font-weight:500;">Needs review</span></div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#F15F22;"></div>
+          <span class="category-name" style="color:var(--fg-tertiary);font-style:italic;">Uncategorized</span>
+        </div>
+        <div class="tx-badges"></div>
+        <div class="tx-amount negative">$87.50</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="tx-row" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">May 23</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#58595C;">US</div>
+          <div class="merchant-info">
+            <div class="merchant-name">USPS Priority Shipping</div>
+            <div class="merchant-sub">Chase ···· 4821</div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#0780A6;"></div>
+          <span class="category-name">Shipping &amp; postage</span>
+        </div>
+        <div class="tx-badges">
+          <span class="tx-badge reconciled">R</span>
+        </div>
+        <div class="tx-amount negative">$28.75</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="tx-row" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">May 22</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#1F7262;">CW</div>
+          <div class="merchant-info">
+            <div class="merchant-name">ComEd — Electric</div>
+            <div class="merchant-sub">BOA ···· 2203</div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#3B7A80;"></div>
+          <span class="category-name">Utilities</span>
+        </div>
+        <div class="tx-badges">
+          <span class="tx-badge reconciled">R</span>
+        </div>
+        <div class="tx-amount negative">$194.22</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="tx-row" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">May 21</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#154C79;">LK</div>
+          <div class="merchant-info">
+            <div class="merchant-name">LinkedIn Premium</div>
+            <div class="merchant-sub">Chase ···· 4821</div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#7C3AED;"></div>
+          <span class="category-name">Software &amp; subscriptions</span>
+        </div>
+        <div class="tx-badges">
+          <span class="tx-badge transfer">T</span>
+        </div>
+        <div class="tx-amount negative">$39.99</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <!-- Month: April 2026 -->
+      <div class="month-divider">April 2026</div>
+
+      <div class="tx-row" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">Apr 30</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#3F5261;">SP</div>
+          <div class="merchant-info">
+            <div class="merchant-name">Stripe — Payment processing</div>
+            <div class="merchant-sub">Chase ···· 4821</div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#0780A6;"></div>
+          <span class="category-name">Professional services</span>
+        </div>
+        <div class="tx-badges">
+          <span class="tx-badge reconciled">R</span>
+        </div>
+        <div class="tx-amount negative">$56.42</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="tx-row selected" onclick="toggleRow(this)">
+        <input type="checkbox" class="tx-checkbox" checked onclick="event.stopPropagation();" onchange="updateBulk()">
+        <div class="tx-date">Apr 29</div>
+        <div class="tx-merchant">
+          <div class="merchant-avatar" style="background:#784E03;">OD</div>
+          <div class="merchant-info">
+            <div class="merchant-name">Office Depot</div>
+            <div class="merchant-sub">Amex ···· 9001 &nbsp;·&nbsp; <span style="color:var(--status-warning);font-weight:500;">Needs review</span></div>
+          </div>
+        </div>
+        <div class="tx-category">
+          <div class="category-dot" style="background:#F15F22;"></div>
+          <span class="category-name" style="color:var(--fg-tertiary);font-style:italic;">Uncategorized</span>
+        </div>
+        <div class="tx-badges">
+          <span class="tx-badge duplicate" title="Possible duplicate">D</span>
+        </div>
+        <div class="tx-amount negative">$74.19</div>
+        <div class="tx-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <!-- Footer summary -->
+      <div class="list-footer">
+        <span>Showing 12 of 84 transactions</span>
+        <div class="list-footer-right">
+          <span>Total expenses</span>
+          <span class="footer-total">$1,269.33</span>
+          <span style="color:var(--fg-tertiary);margin:0 4px;">·</span>
+          <span>Total income</span>
+          <span class="footer-total" style="color:var(--green-400);">+$4,500.00</span>
+        </div>
+      </div>
+    </div><!-- /list-card -->
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <span>Page 1 of 7</span>
+      <div class="pagination-pages">
+        <button class="page-btn" disabled>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7 2L3 6l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <span style="padding:0 4px;color:var(--fg-tertiary);">…</span>
+        <button class="page-btn">7</button>
+        <button class="page-btn">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M5 2L9 6l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /page-content -->
+</div><!-- /main -->
+
+<script>
+  function toggleRow(row) {
+    const cb = row.querySelector('.tx-checkbox');
+    cb.checked = !cb.checked;
+    row.classList.toggle('selected', cb.checked);
+    updateBulk();
+  }
+
+  function toggleAll(masterCb) {
+    document.querySelectorAll('.tx-row .tx-checkbox').forEach(cb => {
+      cb.checked = masterCb.checked;
+      cb.closest('.tx-row').classList.toggle('selected', masterCb.checked);
+    });
+    updateBulk();
+  }
+
+  function updateBulk() {
+    const checked = document.querySelectorAll('.tx-row .tx-checkbox:checked');
+    const bar = document.getElementById('bulkBar');
+    const count = document.getElementById('bulkCount');
+    if (checked.length > 0) {
+      bar.classList.add('visible');
+      count.textContent = checked.length + ' transaction' + (checked.length === 1 ? '' : 's') + ' selected';
+    } else {
+      bar.classList.remove('visible');
+    }
+  }
+
+  // Initialize bulk bar based on pre-checked rows
+  updateBulk();
+</script>
+</body>
+</html>
