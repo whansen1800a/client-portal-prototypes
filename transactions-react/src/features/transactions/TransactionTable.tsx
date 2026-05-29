@@ -45,7 +45,7 @@ export function TransactionTable({
   const someSelected = selectedIds.size > 0 && !allSelected;
 
   const [page, setPage] = React.useState(0);
-  const rowsPerPage = 15;
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
   return (
     <Box>
@@ -155,7 +155,7 @@ export function TransactionTable({
           rowsPerPage={rowsPerPage}
           rowsPerPageOptions={[15, 25, 50]}
           onPageChange={(_, p) => setPage(p)}
-          onRowsPerPageChange={() => {}}
+          onRowsPerPageChange={e => { setRowsPerPage(Number(e.target.value)); setPage(0); }}
           sx={{ '& .MuiTablePagination-toolbar': { minHeight: 40 } }}
         />
       </Box>
