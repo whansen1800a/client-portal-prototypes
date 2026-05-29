@@ -51,6 +51,16 @@ describe('BulkActionBar', () => {
     expect(onCategorize).toHaveBeenCalledTimes(1);
   });
 
+  it('calls onExclude when Exclude button clicked', () => {
+    const onExclude = vi.fn();
+    render(
+      <BulkActionBar selectedCount={2} onCategorize={noop} onExclude={onExclude} onClear={noop} />,
+      { wrapper }
+    );
+    fireEvent.click(screen.getByText('Exclude'));
+    expect(onExclude).toHaveBeenCalledTimes(1);
+  });
+
   it('calls onClear when Clear clicked', () => {
     const onClear = vi.fn();
     render(
