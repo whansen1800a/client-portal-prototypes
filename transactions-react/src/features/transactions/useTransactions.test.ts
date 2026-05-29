@@ -53,4 +53,13 @@ describe('useTransactions', () => {
     act(() => result.current.setFilters({ category: 'Utilities' }));
     expect(result.current.transactions.every(tx => tx.categoryName === 'Utilities')).toBe(true);
   });
+
+  it('toggleAll only selects visible (filtered) transactions', () => {
+    const { result } = renderHook(() => useTransactions());
+    act(() => result.current.setFilters({ category: 'Utilities' }));
+    act(() => result.current.toggleAll(true));
+    // Only Utilities transactions should be selected, not all 12
+    expect(result.current.selectedIds.size).toBe(result.current.transactions.length);
+    expect(result.current.selectedIds.size).toBeLessThan(MOCK_TRANSACTIONS.length);
+  });
 });

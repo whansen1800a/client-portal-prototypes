@@ -45,8 +45,8 @@ export function useTransactions(): UseTransactionsReturn {
   }, []);
 
   const toggleAll = useCallback((checked: boolean) => {
-    setSelectedIds(checked ? new Set(MOCK_TRANSACTIONS.map(t => t.id)) : new Set());
-  }, []);
+    setSelectedIds(checked ? new Set(transactions.map(t => t.id)) : new Set());
+  }, [transactions]);
 
   const clearSelection = useCallback(() => {
     setSelectedIds(new Set());
