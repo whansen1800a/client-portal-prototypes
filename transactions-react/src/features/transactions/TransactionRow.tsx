@@ -4,7 +4,7 @@ import {
   Box, Typography
 } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { ITransaction } from './transactions.types';
+import { ITransaction, TransactionStatus } from './transactions.types';
 
 interface TransactionRowProps {
   transaction: ITransaction;
@@ -12,11 +12,11 @@ interface TransactionRowProps {
   onToggle: (id: string) => void;
 }
 
-const STATUS_CONFIG = {
+const STATUS_CONFIG: Record<TransactionStatus, { label: string; bgcolor: string; color: string }> = {
   reconciled: { label: 'R', bgcolor: '#DBF6E7', color: '#2DA38D' },
   transfer:   { label: 'T', bgcolor: '#EBF3FF', color: '#1776B6' },
   duplicate:  { label: 'D', bgcolor: '#FFCF7C', color: '#784E03' },
-} as const;
+};
 
 function formatAmount(amount: number, isIncome: boolean): string {
   const abs = Math.abs(amount).toLocaleString('en-US', {
@@ -51,6 +51,7 @@ export function TransactionRow({ transaction: tx, selected, onToggle }: Transact
           checked={selected}
           color="secondary"
           size="small"
+          inputProps={{ 'aria-label': `Select ${tx.merchantName}` }}
           onClick={e => e.stopPropagation()}
           onChange={() => onToggle(tx.id)}
         />
