@@ -1,0 +1,46 @@
+import { GustoPayroll } from '../types/gusto';
+
+export const mockPayroll: GustoPayroll = {
+  uuid: 'p-001',
+  pay_period: { start_date: '2025-05-12', end_date: '2025-05-25' },
+  check_date: '2025-05-30',
+  payroll_deadline: '2025-05-28T23:30:00Z',
+  payroll_type: 'Regular',
+  processing_status: 'unprocessed',
+  calculated_at: null,
+  submission_blockers: [],
+  employee_compensations: [
+    {
+      employee_uuid: 'e-001',
+      name: 'Sarah Chen',
+      initials: 'SC',
+      color: '#4F46E5',
+      flsa_status: 'exempt',
+      fixed_compensations: [{ name: 'Bonus', amount: 0 }, { name: 'Reimbursement', amount: 0 }],
+    },
+    {
+      employee_uuid: 'e-002',
+      name: 'Marcus Webb',
+      initials: 'MW',
+      color: '#059669',
+      flsa_status: 'nonexempt',
+      hourly_rate: 45,
+      regular_hours: 80,
+      overtime_hours: 0,
+      double_overtime_hours: 0,
+      fixed_compensations: [{ name: 'Bonus', amount: 0 }, { name: 'Reimbursement', amount: 0 }],
+    },
+    {
+      employee_uuid: 'e-003',
+      name: 'Priya Sharma',
+      initials: 'PS',
+      color: '#DC2626',
+      flsa_status: 'nonexempt',
+      hourly_rate: 52,
+      regular_hours: 80,
+      overtime_hours: 4,
+      double_overtime_hours: 0,
+      fixed_compensations: [{ name: 'Bonus', amount: 0 }, { name: 'Reimbursement', amount: 0 }],
+    },
+  ],
+};
