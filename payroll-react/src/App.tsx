@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import PayrollShell from './components/shell/PayrollShell';
 import CompanyDetailsPage from './pages/CompanyDetailsPage';
 import ContractorsPage from './pages/ContractorsPage';
