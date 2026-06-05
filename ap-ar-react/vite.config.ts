@@ -7,6 +7,8 @@ export default defineConfig({
   build: {
     outDir: '../ap-ar-react-build',
     emptyOutDir: true,
+    minify: false,
+    sourcemap: true,
   },
   server: { port: 5174 }
 })
