@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import AppShell, { ActiveView } from './components/shell/AppShell';
 import APARDashboard from './components/overview/APARDashboard';
+import APInvoiceList from './components/payables/APInvoiceList';
 import { mockAPInvoices, mockARInvoices } from './mock/mockData';
 import { APARState } from './types/invoice.types';
 
@@ -24,7 +25,7 @@ export default function App() {
   return (
     <AppShell activeView={activeView} onViewChange={setActiveView}>
       {activeView === 'overview' && <APARDashboard state={state} onNavigate={setActiveView} />}
-      {activeView === 'payables' && <Box sx={{ p: 4 }}>Payables coming soon...</Box>}
+      {activeView === 'payables' && <APInvoiceList state={state} updateState={updateState} />}
       {activeView === 'receivables' && <Box sx={{ p: 4 }}>Receivables coming soon...</Box>}
     </AppShell>
   );
