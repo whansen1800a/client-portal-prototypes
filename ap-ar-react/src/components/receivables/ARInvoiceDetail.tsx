@@ -9,7 +9,7 @@ import StatusChip from '../payables/StatusChip';
 
 interface Props {
   state: APARState;
-  updateState: (partial: Partial<APARState>) => void;
+  updateState: (partial: Partial<APARState> | ((s: APARState) => Partial<APARState>)) => void;
 }
 
 export default function ARInvoiceDetail({ state, updateState }: Props) {
@@ -18,16 +18,16 @@ export default function ARInvoiceDetail({ state, updateState }: Props) {
 
   const handleMarkPaid = () => {
     if (!invoice) return;
-    updateState({
-      arInvoices: state.arInvoices.map(i =>
-        i.id === invoice.id ? { ...i, status: 'paid', amountPaid: i.amount } : i
+    updateState(s => ({
+      arInvoices: s.arInvoices.map(i =>
+        i.id === invoice.id ? { ...i, status: 'paid' as const, amountPaid: i.amount } : i
       ),
-    });
+    }));
   };
 
   if (!invoice) return null;
 
-  const paidPct = (invoice.amountPaid / invoice.amount) * 100;
+  const paidPct = Math.min(100, (invoice.amountPaid / invoice.amount) * 100);
 
   return (
     <Drawer anchor="right" open={state.arDetailOpen} onClose={close}

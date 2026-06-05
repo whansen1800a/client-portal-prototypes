@@ -21,7 +21,12 @@ const initialState: APARState = {
 export default function App() {
   const [activeView, setActiveView] = useState<ActiveView>('overview');
   const [state, setState] = useState<APARState>(initialState);
-  const updateState = (partial: Partial<APARState>) => setState(s => ({ ...s, ...partial }));
+  const updateState = (partial: Partial<APARState> | ((s: APARState) => Partial<APARState>)) => {
+    setState(s => {
+      const patch = typeof partial === 'function' ? partial(s) : partial;
+      return { ...s, ...patch };
+    });
+  };
 
   return (
     <AppShell

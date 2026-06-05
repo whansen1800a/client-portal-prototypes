@@ -12,7 +12,7 @@ import { formatCurrency } from '../../utils/invoiceHelpers';
 
 interface Props {
   state: APARState;
-  updateState: (partial: Partial<APARState>) => void;
+  updateState: (partial: Partial<APARState> | ((s: APARState) => Partial<APARState>)) => void;
 }
 
 function emptyLine(): LineItem {
@@ -44,7 +44,7 @@ export default function NewInvoiceModal({ state, updateState }: Props) {
   const handleSave = () => {
     const newInvoice: ARInvoice = {
       id: `ar-${Date.now()}`,
-      invoiceNumber: `AR-2024-${1200 + state.arInvoices.length}`,
+      invoiceNumber: `AR-${new Date().getFullYear()}-${1200 + Math.floor(Math.random() * 900)}`,
       customer: { id: `c-new-${Date.now()}`, name: customerName, email: customerEmail },
       issueDate: new Date().toISOString().split('T')[0],
       dueDate,
@@ -54,11 +54,25 @@ export default function NewInvoiceModal({ state, updateState }: Props) {
       lineItems,
       agingDays: 0,
     };
-    updateState({ arInvoices: [...state.arInvoices, newInvoice], arCreateOpen: false });
-    setCustomerName('');
-    setCustomerEmail('');
-    setDueDate('');
-    setLineItems([emptyLine()]);
+    updateState(s => ({ arInvoices: [...s.arInvoices, newInvoice], arCreateOpen: false }));
+    setCustomerName(''); setCustomerEmail(''); setDueDate(''); setLineItems([emptyLine()]);
+  };
+
+  const handleSaveDraft = () => {
+    const newInvoice: ARInvoice = {
+      id: `ar-${Date.now()}`,
+      invoiceNumber: `AR-${new Date().getFullYear()}-${1200 + Math.floor(Math.random() * 900)}`,
+      customer: { id: `c-new-${Date.now()}`, name: customerName, email: customerEmail },
+      issueDate: new Date().toISOString().split('T')[0],
+      dueDate: dueDate || '',
+      amount: total,
+      amountPaid: 0,
+      status: 'draft',
+      lineItems,
+      agingDays: 0,
+    };
+    updateState(s => ({ arInvoices: [...s.arInvoices, newInvoice], arCreateOpen: false }));
+    setCustomerName(''); setCustomerEmail(''); setDueDate(''); setLineItems([emptyLine()]);
   };
 
   return (
@@ -139,7 +153,7 @@ export default function NewInvoiceModal({ state, updateState }: Props) {
 
       <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
         <Button variant="outlined" onClick={close}>Cancel</Button>
-        <Button variant="outlined" disabled={!customerName || total === 0}>Save Draft</Button>
+        <Button variant="outlined" disabled={!customerName || total === 0} onClick={handleSaveDraft}>Save Draft</Button>
         <Button variant="contained" disabled={!customerName || !dueDate || total === 0} onClick={handleSave}>
           Save &amp; Send
         </Button>

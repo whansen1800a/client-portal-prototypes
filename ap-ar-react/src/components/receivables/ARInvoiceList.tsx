@@ -16,7 +16,7 @@ import NewInvoiceModal from './NewInvoiceModal';
 
 interface Props {
   state: APARState;
-  updateState: (partial: Partial<APARState>) => void;
+  updateState: (partial: Partial<APARState> | ((s: APARState) => Partial<APARState>)) => void;
 }
 
 export default function ARInvoiceList({ state, updateState }: Props) {
@@ -84,7 +84,7 @@ export default function ARInvoiceList({ state, updateState }: Props) {
             </TableHead>
             <TableBody>
               {filtered.map(inv => {
-                const paidPct = (inv.amountPaid / inv.amount) * 100;
+                const paidPct = Math.min(100, (inv.amountPaid / inv.amount) * 100);
                 return (
                   <TableRow key={inv.id} hover>
                     <TableCell sx={{ fontSize: 13 }}>{inv.invoiceNumber}</TableCell>

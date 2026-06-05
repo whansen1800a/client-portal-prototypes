@@ -16,7 +16,7 @@ import APInvoiceDetail from './APInvoiceDetail';
 
 interface Props {
   state: APARState;
-  updateState: (partial: Partial<APARState>) => void;
+  updateState: (partial: Partial<APARState> | ((s: APARState) => Partial<APARState>)) => void;
 }
 
 export default function APInvoiceList({ state, updateState }: Props) {
@@ -31,7 +31,7 @@ export default function APInvoiceList({ state, updateState }: Props) {
     return matchSearch && matchStatus;
   });
 
-  const canApprove = state.userRole === 'approver' || state.userRole === 'payer';
+  const canApprove = state.userRole === 'approver';
   const canPay     = state.userRole === 'payer';
 
   const openDetail = (id: string) => {

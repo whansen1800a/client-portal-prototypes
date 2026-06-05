@@ -12,7 +12,7 @@ import StatusChip from './StatusChip';
 
 interface Props {
   state: APARState;
-  updateState: (partial: Partial<APARState>) => void;
+  updateState: (partial: Partial<APARState> | ((s: APARState) => Partial<APARState>)) => void;
 }
 
 const APPROVAL_STEPS = ['Submitted', 'Under Review', 'Approved', 'Scheduled', 'Paid'];
@@ -26,29 +26,29 @@ function getActiveStep(status: InvoiceStatus): number {
 
 export default function APInvoiceDetail({ state, updateState }: Props) {
   const invoice = state.apInvoices.find(i => i.id === state.selectedAPInvoiceId);
-  const canApprove = state.userRole === 'approver' || state.userRole === 'payer';
+  const canApprove = state.userRole === 'approver';
   const canPay     = state.userRole === 'payer';
 
   const close = () => updateState({ apDetailOpen: false, selectedAPInvoiceId: null });
 
   const handleApprove = () => {
     if (!invoice) return;
-    updateState({
-      apInvoices: state.apInvoices.map(i => i.id === invoice.id ? { ...i, status: 'approved' } : i),
-    });
+    updateState(s => ({
+      apInvoices: s.apInvoices.map(i => i.id === invoice.id ? { ...i, status: 'approved' as const } : i),
+    }));
   };
 
   const handleSchedule = () => {
     if (!invoice) return;
-    updateState({
-      apInvoices: state.apInvoices.map(i => i.id === invoice.id ? { ...i, status: 'scheduled' } : i),
-    });
+    updateState(s => ({
+      apInvoices: s.apInvoices.map(i => i.id === invoice.id ? { ...i, status: 'scheduled' as const } : i),
+    }));
   };
 
   if (!invoice) return null;
 
   return (
-    <Drawer anchor="right" open={state.apDetailOpen} onClose={close}
+    <Drawer anchor="right" open={state.apDetailOpen && !!invoice} onClose={close}
       PaperProps={{ sx: { width: 560, p: 3 } }}>
       {/* Header */}
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start" mb={3}>
