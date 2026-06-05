@@ -1,6 +1,5 @@
-import React from 'react';
 import { Chip } from '@mui/material';
-import { InvoiceStatus } from '../../types/invoice.types';
+import type { InvoiceStatus } from '../../types/invoice.types';
 import { statusColor } from '../../utils/invoiceHelpers';
 
 const STATUS_LABELS: Record<InvoiceStatus, string> = {

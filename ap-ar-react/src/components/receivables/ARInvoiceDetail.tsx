@@ -1,10 +1,9 @@
-import React from 'react';
 import {
   Drawer, Box, Typography, Stack, Button, Divider,
   Table, TableHead, TableBody, TableRow, TableCell, LinearProgress,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { APARState } from '../../types/invoice.types';
+import type { APARState } from '../../types/invoice.types';
 import { formatCurrency } from '../../utils/invoiceHelpers';
 import StatusChip from '../payables/StatusChip';
 

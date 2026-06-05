@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Drawer, Box, Typography, Stack, Button, Divider,
   Table, TableHead, TableBody, TableRow, TableCell,
@@ -7,7 +6,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { APARState, InvoiceStatus } from '../../types/invoice.types';
+import type { APARState, InvoiceStatus } from '../../types/invoice.types';
 import { formatCurrency } from '../../utils/invoiceHelpers';
 import StatusChip from './StatusChip';
 

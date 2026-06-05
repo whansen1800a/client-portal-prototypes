@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Dialog, DialogTitle, DialogContent, DialogActions,
-  Box, Typography, Stack, Button, TextField, IconButton,
+  Typography, Stack, Button, TextField, IconButton,
   Table, TableHead, TableBody, TableRow, TableCell, Divider,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { APARState, ARInvoice, LineItem } from '../../types/invoice.types';
+import type { APARState, ARInvoice, LineItem } from '../../types/invoice.types';
 import { formatCurrency } from '../../utils/invoiceHelpers';
 
 interface Props {

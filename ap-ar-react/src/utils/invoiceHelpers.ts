@@ -1,4 +1,4 @@
-import { APInvoice, ARInvoice, AgingSummary, InvoiceStatus } from '../types/invoice.types';
+import type { APInvoice, ARInvoice, AgingSummary, InvoiceStatus } from '../types/invoice.types';
 
 export function getAPAgingSummary(invoices: APInvoice[]): AgingSummary {
   const unpaid = invoices.filter(i => i.status !== 'paid');

@@ -6,6 +6,8 @@ import {
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import type { UserRole } from '../../types/invoice.types';
+import RoleSwitcher from './RoleSwitcher';
 
 const DRAWER_WIDTH = 240;
 
@@ -15,6 +17,8 @@ interface AppShellProps {
   activeView: ActiveView;
   onViewChange: (v: ActiveView) => void;
   children: React.ReactNode;
+  userRole: UserRole;
+  onRoleChange: (r: UserRole) => void;
 }
 
 const NAV_ITEMS: { label: string; view: ActiveView; icon: React.ReactNode }[] = [
@@ -23,7 +27,7 @@ const NAV_ITEMS: { label: string; view: ActiveView; icon: React.ReactNode }[] = 
   { label: 'Accounts Receivable', view: 'receivables', icon: <ArrowUpwardIcon /> },
 ];
 
-export default function AppShell({ activeView, onViewChange, children }: AppShellProps) {
+export default function AppShell({ activeView, onViewChange, children, userRole, onRoleChange }: AppShellProps) {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       {/* Top Bar */}
@@ -38,6 +42,7 @@ export default function AppShell({ activeView, onViewChange, children }: AppShel
           <Typography sx={{ color: 'text.secondary', fontSize: 14, flexGrow: 1 }}>
             AP / AR Management
           </Typography>
+          <RoleSwitcher role={userRole} onChange={onRoleChange} />
           <Chip label="Demo Mode" size="small" sx={{ bgcolor: '#FFF3E0', color: '#E65100', fontWeight: 500 }} />
           <Avatar sx={{ width: 32, height: 32, bgcolor: 'secondary.main', fontSize: 14 }}>SC</Avatar>
         </Toolbar>

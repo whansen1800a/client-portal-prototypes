@@ -1,4 +1,4 @@
-import { APInvoice, ARInvoice } from '../types/invoice.types';
+import type { APInvoice, ARInvoice } from '../types/invoice.types';
 
 export const mockAPInvoices: APInvoice[] = [
   {

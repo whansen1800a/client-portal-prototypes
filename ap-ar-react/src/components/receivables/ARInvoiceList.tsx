@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box, Typography, Card, Table, TableHead, TableBody, TableRow, TableCell,
   TableContainer, Button, Stack, TextField, InputAdornment,
@@ -8,7 +8,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SendIcon from '@mui/icons-material/Send';
-import { APARState } from '../../types/invoice.types';
+import type { APARState } from '../../types/invoice.types';
 import { formatCurrency } from '../../utils/invoiceHelpers';
 import StatusChip from '../payables/StatusChip';
 import ARInvoiceDetail from './ARInvoiceDetail';

@@ -1,9 +1,8 @@
-import React from 'react';
 import { Box, Card, CardContent, Grid, Typography, Divider, Button, Stack } from '@mui/material';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import { APARState } from '../../types/invoice.types';
-import { ActiveView } from '../shell/AppShell';
+import type { APARState } from '../../types/invoice.types';
+import type { ActiveView } from '../shell/AppShell';
 import { getAPAgingSummary, getARAgingSummary, formatCurrency } from '../../utils/invoiceHelpers';
 
 interface Props {
