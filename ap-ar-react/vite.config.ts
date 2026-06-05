@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  base: '/client-portal-prototypes/ap-ar-react-build/',
   build: {
     outDir: '../ap-ar-react-build',
     emptyOutDir: true,
